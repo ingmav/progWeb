@@ -1,0 +1,107 @@
+<div class="flex-row flex-gap module-search-bar">
+    <mat-form-field class="flex-fill" appearance="fill">
+        <mat-label>Buscar</mat-label>
+        <input matInput [(ngModel)]="searchQuery" (keyup.escape)="cleanSearch()" (keyup.enter)="applySearch()" placeholder="Buscar usuario" autocomplete="off">
+        <button matSuffix *ngIf="searchQuery" mat-icon-button (click)="cleanSearch()" [attr.aria-label]="'Clean Query'" [attr.aria-pressed]="'cleanQuery'">
+            <mat-icon>close</mat-icon>
+        </button>
+        <button mat-icon-button matSuffix (click)="applySearch()">
+            <mat-icon>search</mat-icon>
+        </button>
+    </mat-form-field>
+    <!--button mat-icon-button  [disabled]="isLoadingPDF">
+        <mat-icon svgIcon="pdf-icon"></mat-icon>
+    </button-->
+    <button mat-raised-button color="primary" (click)="openDialog()" [matTooltip]="'Nuevo Movimiento'"><mat-icon>add</mat-icon></button>
+</div>
+
+<div>
+    <alert-panel></alert-panel>
+    <mat-progress-bar *ngIf="isLoadingPDF" mode="query"></mat-progress-bar>
+</div>
+
+<mat-card class="table-card flex-fill">
+    <div class="flex-column" style="height: 100%;">
+        <div class="main-list-table left-click-open flex-fill">
+            <table mat-table [dataSource]="data" matSort matSortActive="updated_at" matSortDirection="desc">
+                <ng-container matColumnDef="descripcion">
+                    <th mat-header-cell *matHeaderCellDef>Descripcion</th>
+                    <td mat-cell *matCellDef="let row">
+                        {{ row.descripcion }}
+                        
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="datos">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Datos</th>
+                    <td mat-cell *matCellDef="let row">
+                        Marca: <label *ngIf="row.marca==''">-----</label><label *ngIf="row.marca!=''">{{row.marca}}</label>  
+                        Modelo: <label *ngIf="row.modelo==''">-----</label><label *ngIf="row.modelo!=''">{{row.modelo}}</label>
+                        <div style="font-size: 9pt;" *ngIf="row.talla!='' || row.talla!=null">
+                            Talla: <label *ngIf="row.talla==''">-----</label><label *ngIf="row.talla!=''">{{row.talla}}</label>
+                        </div>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="inventario">
+                    <th mat-header-cell *matHeaderCellDef class="hide-xs">Inventario</th>
+                    <td mat-cell *matCellDef="let row" class="hide-xs">
+                        <div matTooltip="min: {{ row.min}} - max: {{ row.max}}" [ngClass]="{'correcto': row.inventario>row.min, 'incorrecto':row.inventario==row.min}">
+                            {{ row.inventario }}
+                        </div>
+                        
+                                
+                    </td>
+                </ng-container>
+
+                
+                <ng-container matColumnDef="ultimo_movimiento">
+                    <th width="1" style="white-space: nowrap;" mat-header-cell *matHeaderCellDef mat-sort-header>Ultimo Movimiento</th>
+                    <td mat-cell *matCellDef="let row" style="white-space: nowrap; text-align: center;">
+                        <span *ngIf="!row.ultimo_movimiento">Nunca</span>
+                        <span *ngIf="row.ultimo_movimiento">
+                            {{row.ultimo_movimiento | date:'dd - MMM - y'}}<br>
+                            {{row.ultimo_movimiento | date:'h:mm a'}}
+                        </span>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="updated_at">
+                    <th width="1" mat-header-cell *matHeaderCellDef mat-sort-header disableClear class="hide-sm hide-xs">
+                        Actualizado
+                    </th>
+                    <td mat-cell *matCellDef="let row" style="white-space: nowrap; text-align: center;" class="hide-sm hide-xs">{{row.updated_at | date:'dd - MMM - y'}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="loadingResults">
+                    <td mat-footer-cell *matFooterCellDef [attr.colspan]="displayedColumns.length" class="no-results-found">
+                        --| Cargando Registros |--
+                        <mat-progress-bar mode="query"></mat-progress-bar>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="noResultsFound">
+                    <td mat-footer-cell *matFooterCellDef [attr.colspan]="displayedColumns.length" class="no-results-found" >
+                        No se encontraron registros 
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="openDialog(row)" [cdkContextMenuTriggerFor]="rowMenu" [cdkContextMenuTriggerData]="{row:row}"></tr>
+                <tr mat-footer-row *matFooterRowDef="['loadingResults']" [ngClass]="{'hide':!isLoadingResults}"></tr>
+                <tr mat-footer-row *matFooterRowDef="['noResultsFound']" [ngClass]="{'hide':!(data!=null && data.length==0 && !isLoadingResults)}"></tr>
+            </table>
+        </div>
+        <div>
+            <mat-paginator [length]="resultsLength" [pageSize]="pageSize" [pageSizeOptions]="[25, 50, 100]" showFirstLastButtons aria-label="Selecciona una página"></mat-paginator>
+        </div>
+    </div>
+</mat-card>
+
+<ng-template #rowMenu let-row="row" let-status="status">
+    <div class="context-menu mat-elevation-z2" cdkMenu>
+        <button class="context-menu-item" cdkMenuItem (click)="openDialog(row)"><mat-icon>edit</mat-icon>&nbsp;Editar</button>
+        <button class="context-menu-item" cdkMenuItem (click)="eliminarArticulo(row)"><mat-icon>delete</mat-icon>&nbsp;Eliminar</button>
+        
+    </div>
+</ng-template>

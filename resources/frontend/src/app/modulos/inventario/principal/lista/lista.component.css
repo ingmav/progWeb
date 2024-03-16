@@ -1,0 +1,14 @@
+.correcto .incorrecto
+{
+    font-weight: bold;
+    font-size: 16pt;
+}
+.correcto
+{
+    color: green;
+}
+
+.incorrecto
+{
+    color: red;
+}

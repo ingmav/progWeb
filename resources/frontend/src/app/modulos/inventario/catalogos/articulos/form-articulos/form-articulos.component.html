@@ -1,0 +1,77 @@
+<div class="flex-column" style="height: 100%; overflow: hidden; flex: 1 1 0%;" (document:keydown.escape)="cancelarAccion()"> <!-- Main Body <<<<<<< -->
+    <section class="dialog-toolbar"> <!-- Toolbar Menu <<<<<<< -->
+        <div class="flex-row">
+            
+            <div class="label-info">
+                Nueva Artículo
+            </div>
+            <button mat-button (click)="guardar()" [disabled]="isLoading || isSaving || !form.valid">
+                <mat-icon>{{(changesDetected)?'save_as':'save'}}</mat-icon><span class="hide-xs">&nbsp;Guardar</span>
+            </button>
+            <div class="flex-fill"></div>
+            <div class="label-info screen-size-icon" *ngIf="currentScreenSize == 'xs' || currentScreenSize == 'sm'">
+                <mat-icon>phone_iphone</mat-icon>
+            </div>
+            <button mat-button class="boton-accion" (click)="resizeDialog()" [matTooltip]="(dialogMaxSize)?'Restaurar':'Maximizar'" [matTooltipPosition]="'left'" tabindex="-1" *ngIf="currentScreenSize != 'xs' && currentScreenSize != 'sm'">
+                <mat-icon>{{(dialogMaxSize)?'fit_screen':'fullscreen'}}</mat-icon>
+            </button>
+            <button class="boton-accion boton-cerrar" mat-button (click)="cerrar()" tabindex="-1"><mat-icon>close</mat-icon></button>
+        </div>
+    </section> <!-- <<<<<<< Toolbar Menu -->
+    <mat-progress-bar *ngIf="isLoading || isSaving" [mode]="(isSaving)?'indeterminate':'query'" [color]="(isSaving)?'accent':'primary'"></mat-progress-bar>
+    <section>
+        <alert-panel></alert-panel>
+    </section>
+    <section class="flex-fill flex-column" style="padding:8px; overflow: auto;">
+        <div class="flex-fill flex-column flex-gap">
+            <mat-card class="flex-column flex-gap xs-max-height-user-form" style="padding: 8px;" [formGroup]="form">
+                <div class="flex-row flex-xs-column flex-fill flex-gap">
+                    <mat-form-field appearance="fill" class="flex-fill">
+                        <mat-label>DESCRIPCIÓN: </mat-label>
+                        <input type="text" matInput autocomplete="off" formControlName="descripcion" placeholder="Descripcion"  required cdkFocusInitial>
+                        <mat-error *ngIf="form.get('descripcion').hasError('required')">El Correo Electrónico es obligatorio</mat-error>
+                        
+                    </mat-form-field>
+                </div>
+                <div class="flex-row flex-xs-column flex-fill flex-gap">    
+                    <mat-form-field appearance="fill" class="flex-fill">
+                        <mat-label>MARCA: </mat-label>
+                        <input type="text" matInput autocomplete="off" formControlName="marca" placeholder="Marca"  required cdkFocusInitial>
+                        <mat-error *ngIf="form.get('marca').hasError('required')">El Correo Electrónico es obligatorio</mat-error>
+                        
+                    </mat-form-field>
+                </div>
+                <div class="flex-row flex-xs-column flex-fill flex-gap">    
+                    <mat-form-field appearance="fill" class="flex-fill">
+                        <mat-label>MODELO: </mat-label>
+                        <input type="text" matInput autocomplete="off" formControlName="modelo" placeholder="Modelo"  required cdkFocusInitial>
+                        <mat-error *ngIf="form.get('modelo').hasError('required')">El Correo Electrónico es obligatorio</mat-error>
+                        
+                    </mat-form-field>
+                </div>
+                <div class="flex-row flex-xs-column flex-fill flex-gap">    
+                    <mat-form-field appearance="fill" class="flex-fill">
+                        <mat-label>TALLA: </mat-label>
+                        <input type="text" matInput autocomplete="off" formControlName="talla" placeholder="Talla"  required cdkFocusInitial>
+                        <mat-error *ngIf="form.get('talla').hasError('required')">El Correo Electrónico es obligatorio</mat-error>
+                        
+                    </mat-form-field>
+                </div>
+                <div class="flex-row flex-xs-column flex-fill flex-gap">    
+                    <mat-form-field appearance="fill" class="flex-fill">
+                        <mat-label>MIN: </mat-label>
+                        <input type="number" matInput autocomplete="off" formControlName="min" placeholder="Min"  required cdkFocusInitial>
+                        <mat-error *ngIf="form.get('min').hasError('required')">El Correo Electrónico es obligatorio</mat-error>
+                        
+                    </mat-form-field>
+                    <mat-form-field appearance="fill" class="flex-fill">
+                        <mat-label>MAX: </mat-label>
+                        <input type="number" matInput autocomplete="off" formControlName="max" placeholder="max"  required cdkFocusInitial>
+                        <mat-error *ngIf="form.get('max').hasError('required')">El Correo Electrónico es obligatorio</mat-error>
+                        
+                    </mat-form-field>
+                </div>
+            </mat-card>
+        </div>
+    </section>
+</div>

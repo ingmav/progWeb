@@ -1,0 +1,56 @@
+table > th{
+    background-color: dimgrey;
+    color: white
+}
+
+.encabezado{
+    display: flex;
+    flex-direction: row;
+    padding: 10pt;
+    background-color: #4a4848;
+    color: whitesmoke;
+}
+
+.encabezado-lista{
+    display: flex;
+    flex-direction: row;
+    padding: 10pt;
+    background-color:gainsboro;
+    color: black;
+    border-bottom: 1px solid black;
+}
+
+.encabezado, .encabezado-lista > div > span{
+    font-weight: 500;
+}
+
+.conteos,
+.conteos-lista,
+.call-center{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.conteos, .conteos-lista{
+    text-align: center;
+    font-size: small;
+}
+
+.conteos:not(:last-child){
+    padding-right: 10px;
+    margin-right: 10px;
+    border-right: 1px solid rgba(255,255,255,0.50);
+}
+
+.conteos-lista:not(:last-child){
+    padding-right: 10px;
+    margin-right: 10px;
+    border-right: 1px solid rgba(0,0,0,1);
+}
+
+.datos
+{
+    padding: 5px; 
+    border-right: 1px solid white;
+}
