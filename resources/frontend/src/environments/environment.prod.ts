@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  base_url: '/api',
+  base_url: '/TriguenaWeb/public/api',
   images_url: '/images/'
 };
