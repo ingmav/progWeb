@@ -123,7 +123,7 @@ export class FormPersonalComponent {
           this.form.get('id').patchValue(response.data.id);
           this.changesDetected = false;
           this.alertPanel.showSuccess('Datos guardados con éxito',3);
-          
+          this.dialogRef.close(response);
           this.savedData = true;
         },
         error:(response:any)=>{

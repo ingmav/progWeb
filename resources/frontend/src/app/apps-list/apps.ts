@@ -53,22 +53,22 @@ export const APPS:App [] = [
             }
         ] 
     },
-    { name:'Inventario Higiene', route: "inventario-higiene",  icon: "assets/icons/control-acceso.svg", 
+    { name:'Inventario Higiene', route: "inventario-higiene",  icon: "assets/icons/higiene.png", 
         menu:[
             {
                 name:'Inventario',
                 icon: 'menu_open',
                 identificador:'administracion',
                 children:[
-                    { name:"Listado",      route: "inventario-higiene/listado",          icon: "inbox",        /*permission:"hr5UhgMTDmF9EiLYeq5x0cz0e281IWRU"*/ },
+                    { name:"Listado",      route: "inventario-higiene/listado",          icon: "inbox",        permission:"bTCHPgL2Ovp0UslpRjS38HCp0N93o2zt" },
             ]},
             {
                 name:'Catalogos',
                 icon: 'drag_indicator',
                 identificador:'configuracion',
                 children:[
-                    { name:'Artículos',      route: "inventario-higiene/articulos",          icon: "bookmark",                    /*permission:"tTVayONYIDylH9dk7jg5143h0FKoSpBi"*/ },
-                    { name:'Personal',      route: "inventario-higiene/personal",          icon: "person_pin",                    /*permission:"tTVayONYIDylH9dk7jg5143h0FKoSpBi"*/ },
+                    { name:'Artículos',      route: "inventario-higiene/articulos",          icon: "bookmark",                    permission:"bTCHPgL2Ovp0UslpRjS38HCp0N93o2zt" },
+                    { name:'Personal',      route: "inventario-higiene/personal",          icon: "person_pin",                    permission:"bTCHPgL2Ovp0UslpRjS38HCp0N93o2zt" },
                 ]
             }
         ] 

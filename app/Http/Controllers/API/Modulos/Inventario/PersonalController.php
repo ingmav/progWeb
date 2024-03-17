@@ -87,8 +87,8 @@ class PersonalController extends Controller
                 {
                     $obj = new CatalogoPersonal();
                 }
-                $obj->descripcion = $parametros['descripcion'];
-                $obj->cargo = $parametros['cargo'];
+                $obj->descripcion = strtoupper($parametros['descripcion']);
+                $obj->cargo = strtoupper($parametros['cargo']);
                 $obj->user_id = $usuario->id;
                 $obj->save();
                 DB::commit();

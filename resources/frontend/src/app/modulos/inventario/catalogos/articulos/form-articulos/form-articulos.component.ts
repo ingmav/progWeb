@@ -96,7 +96,7 @@ export class FormArticulosComponent {
       'modelo':             ['',[Validators.required]],
       'talla':             ['',[Validators.required]],
       //'inventario':             ['',[Validators.required, Validators.min(0)]],
-      'min':             ['',[Validators.required, Validators.min(0)]],
+      'min':             ['',[Validators.required]],
       'max':             ['',[Validators.required]],
       
     });
@@ -146,7 +146,7 @@ export class FormArticulosComponent {
           this.form.get('id').patchValue(response.data.id);
           this.changesDetected = false;
           this.alertPanel.showSuccess('Datos guardados con éxito',3);
-          
+          this.dialogRef.close(response);
           this.savedData = true;
         },
         error:(response:any)=>{

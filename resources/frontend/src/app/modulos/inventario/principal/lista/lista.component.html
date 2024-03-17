@@ -33,8 +33,8 @@
                 </ng-container>
 
                 <ng-container matColumnDef="datos">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Datos</th>
-                    <td mat-cell *matCellDef="let row">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="hide-xs  hide-sm">Datos</th>
+                    <td mat-cell *matCellDef="let row" class="hide-xs  hide-sm">
                         Marca: <label *ngIf="row.marca==''">-----</label><label *ngIf="row.marca!=''">{{row.marca}}</label>  
                         Modelo: <label *ngIf="row.modelo==''">-----</label><label *ngIf="row.modelo!=''">{{row.modelo}}</label>
                         <div style="font-size: 9pt;" *ngIf="row.talla!='' || row.talla!=null">
@@ -44,8 +44,8 @@
                 </ng-container>
 
                 <ng-container matColumnDef="inventario">
-                    <th mat-header-cell *matHeaderCellDef class="hide-xs">Inventario</th>
-                    <td mat-cell *matCellDef="let row" class="hide-xs">
+                    <th mat-header-cell *matHeaderCellDef class="hide-xs  hide-sm">Inventario</th>
+                    <td mat-cell *matCellDef="let row" class="hide-xs hide-sm">
                         <div matTooltip="min: {{ row.min}} - max: {{ row.max}}" [ngClass]="{'correcto': row.inventario>row.min, 'incorrecto':row.inventario==row.min}">
                             {{ row.inventario }}
                         </div>

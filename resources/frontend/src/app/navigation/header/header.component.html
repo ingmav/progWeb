@@ -3,12 +3,12 @@
     <mat-icon style="color: white;">home</mat-icon>
   </button>
 
-  <!--div class="hide-gt-xs" *ngIf="menus && menus.length > 0" style="color: white;">
+  <div class="hide-gt-xs" *ngIf="menus && menus.length > 0" style="color: white;">
     <button mat-icon-button [matMenuTriggerFor]="appMainMenu" xPosition="before"><mat-icon>menu_open</mat-icon></button>
     <mat-menu #appMainMenu="matMenu">
       <button mat-menu-item *ngFor="let item of menus"  [matMenuTriggerFor]="navAppMenu" [matMenuTriggerData]="{identificador:item.identificador}"><mat-icon>{{ item.icon }}</mat-icon>{{ item.name }}</button>
     </mat-menu>
-  </div-->
+  </div>
 
   <span class="header-links, font-header-elements" *ngIf="selectedApp">
     <a *ngIf="selectedAppLink" routerLink="{{selectedAppLink.route}}">
@@ -17,7 +17,7 @@
   </span>
 
   <span class="header-links, font-header-elements" *ngIf="!selectedApp"  style="color:whitesmoke;">
-    PLATAFORMA BASE
+    TRIGUEÑA WEB
   </span>
   
   <div class="hide-xs" style="color: white;">

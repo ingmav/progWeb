@@ -11,6 +11,8 @@ import { map, startWith } from 'rxjs/operators';
 import { DatePipe } from '@angular/common';
 import { MatSelectChange } from '@angular/material/select';
 import { DialogConfirmActionComponent } from 'src/app/shared/components/dialog-confirm-action/dialog-confirm-action.component';
+import { FormArticulosComponent } from '../../catalogos/articulos/form-articulos/form-articulos.component';
+import { FormPersonalComponent } from '../../catalogos/personal/form-personal/form-personal.component';
 
 export interface DialogData {
   id: number;
@@ -107,6 +109,65 @@ export class MovimientoComponent {
 
     this.cargarCatalogos();
     this.validaIngresos();
+  }
+
+  insertaArticulo()
+  {
+    let dialogConfig:any = {
+      maxWidth: '100%',
+      width: '80%',
+      height: '60%',
+      disableClose: true,
+      data:{}
+    };
+
+    const dialogRef = this.dialog.open(FormArticulosComponent,dialogConfig);
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(result){
+        console.log(result);
+        return this.servicioService.obtenerCatalogos({}).subscribe({
+          next:(response:any) => {
+            this.filterCatalogs.articulo = response.articulo;
+            this.form.patchValue({articulo_ingresar:result.data.id});
+            console.log(this.form.value);
+            console.log(result.id);
+            console.log(response.articulo);
+            },
+          error:(response:any) => {
+            this.alertPanel.showError(response.error.message);
+          }
+        });
+      }
+    });
+
+  }
+  insertaTrabajador()
+  {
+    let dialogConfig:any = {
+      maxWidth: '100%',
+      width: '80%',
+      height: '25%',
+      disableClose: true,
+      data:{}
+    };
+
+    const dialogRef = this.dialog.open(FormPersonalComponent,dialogConfig);
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(result){
+        return this.servicioService.obtenerCatalogos({}).subscribe({
+          next:(response:any) => {
+            this.filterCatalogs.personal = response.personal;
+            this.form.patchValue({trabajador_ingresar:result.data.id});
+            },
+          error:(response:any) => {
+            this.alertPanel.showError(response.error.message);
+          }
+        });
+      }
+    });
+
   }
 
   cargarCatalogos()
