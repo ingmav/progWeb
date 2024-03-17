@@ -67,8 +67,8 @@ export const APPS:App [] = [
                 icon: 'drag_indicator',
                 identificador:'configuracion',
                 children:[
-                    { name:'Artículos',      route: "inventario-higiene/articulos",          icon: "bookmark",                    permission:"bTCHPgL2Ovp0UslpRjS38HCp0N93o2zt" },
-                    { name:'Personal',      route: "inventario-higiene/personal",          icon: "person_pin",                    permission:"bTCHPgL2Ovp0UslpRjS38HCp0N93o2zt" },
+                    { name:'Artículos',      route: "inventario-higiene/articulos",          icon: "bookmark",                    /*permission:"tTVayONYIDylH9dk7jg5143h0FKoSpBi"*/ },
+                    { name:'Personal',      route: "inventario-higiene/personal",          icon: "person_pin",                    /*permission:"tTVayONYIDylH9dk7jg5143h0FKoSpBi"*/ },
                 ]
             }
         ] 
