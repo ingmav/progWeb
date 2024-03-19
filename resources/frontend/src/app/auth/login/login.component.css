@@ -1,5 +1,5 @@
 .login {
-    background: url('../../../assets/bk.jpg') no-repeat center center fixed; 
+    background: url('../../../assets/bk4.jpg') no-repeat center center fixed; 
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -14,10 +14,10 @@
 
 .boder-card {
     border-radius: 10px !important;
-    box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
     border: #000 !important;
     margin:0px;
     padding: 10px 0;
+    box-shadow: -1px -1px 6px 0 rgb(0, 0, 0), 4px 4px 16px 2px rgb(0, 0, 0);
 }
 
 .error-message{
@@ -33,4 +33,14 @@
     color: #000000!important;
     font-family: 'Gotham Black', sans-serif;
     font-size: 2.5em;
+}
+
+.box-login
+{
+    opacity: 0.8;
+    filter: alpha(opacity=80); 
+    margin:0px; 
+    padding-bottom:10px; 
+    padding-top:10px;
+    
 }

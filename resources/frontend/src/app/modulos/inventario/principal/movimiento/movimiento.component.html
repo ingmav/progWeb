@@ -56,10 +56,20 @@
                 <mat-form-field appearance="fill" class="flex-fill">
                     <mat-label>ARTICULO: </mat-label>
                     <mat-select formControlName='articulo_ingresar'  #articulo (selectionChange)="articuloSeleccionado($event)">
-                        <mat-option *ngFor="let item of filterCatalogs['articulo']" [value]="item.id">{{ item.descripcion }}</mat-option>
-                        
+                        <mat-option *ngFor="let item of filterCatalogs['articulo']" [value]="item.id">
+                            {{ item.descripcion }}
+                            <div style="font-size: 9pt;">
+                                <label *ngIf="item.modelo!=''">MODELO: {{ item.modelo }} -</label>
+                                <label *ngIf="item.marca!=''">MARCA: {{ item.marca }} -</label>
+                                <label *ngIf="item.talla!=''">TALLA: {{ item.talla }} -</label>
+                            </div>
+                        </mat-option>
                     </mat-select>
+                    <!--mat-hint *ngIf="articulo.value!=''">{{ }}</mat-hint>
+                    <mat-hint *ngIf="articulo.value!=''">hola</mat-hint>
+                    <mat-hint *ngIf="articulo.value!=''">hola</mat-hint-->
                 </mat-form-field>
+                
                 <button mat-raised-button color="primary" style="padding: 30px;" (click)="insertaArticulo()">
                     <mat-icon>add_box</mat-icon>
                 </button>
