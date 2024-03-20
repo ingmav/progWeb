@@ -94,8 +94,8 @@ export class ListaComponent {
   openDialogMovto(id?){
     let dialogConfig:any = {
       maxWidth: '100%',
-      width: '80%',
-      height: '60%',
+      width: '100%',
+      height: '1000%',
       disableClose: true,
       data:{}
     };
@@ -117,8 +117,8 @@ export class ListaComponent {
     console.log(obj);
     let dialogConfig:any = {
       maxWidth: '100%',
-      width: '80%',
-      height: '60%',
+      width: '100%',
+      height: '100%',
       disableClose: true,
       data:{ 
         id:obj.id,

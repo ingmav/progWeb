@@ -22,62 +22,119 @@
     <section>
         <alert-panel></alert-panel>
     </section>
-    <section class="flex-fill flex-column" style="padding:8px; overflow: auto;">
-        <div class="flex-fill flex-column flex-gap">
-            <mat-card class="flex-column flex-gap xs-max-height-user-form" style="padding: 8px;" [formGroup]="form">
-                <div class="flex-row flex-xs-column flex-fill flex-gap">
-                    <mat-form-field appearance="fill" class="flex-fill">
-                        <mat-label>DESCRIPCIÓN: </mat-label>
-                        <input type="text" matInput autocomplete="off" formControlName="descripcion" placeholder="Descripcion"  required cdkFocusInitial>
-                        <mat-error *ngIf="form.get('descripcion').hasError('required')">El Correo Electrónico es obligatorio</mat-error>
-                        
-                    </mat-form-field>
-                </div>
-                <div class="flex-row flex-xs-column flex-fill flex-gap"> 
-                    <mat-form-field appearance="fill" class="flex-fill">
-                        <mat-label>TIPO UNIDAD: </mat-label>
-                        <mat-select formControlName='catalogo_unidad_id'>
-                            <mat-option *ngFor="let item of unidades" [value]="item.id">{{ item.descripcion }}</mat-option>
-                        </mat-select>
-                    </mat-form-field>   
-                    <mat-form-field appearance="fill" class="flex-fill">
-                        <mat-label>MARCA: </mat-label>
-                        <input type="text" matInput autocomplete="off" formControlName="marca" placeholder="Marca"  required cdkFocusInitial>
-                        <mat-error *ngIf="form.get('marca').hasError('required')">El Correo Electrónico es obligatorio</mat-error>
-                        
-                    </mat-form-field>
-                </div>
-                <div class="flex-row flex-xs-column flex-fill flex-gap">    
-                    <mat-form-field appearance="fill" class="flex-fill">
-                        <mat-label>MODELO: </mat-label>
-                        <input type="text" matInput autocomplete="off" formControlName="modelo" placeholder="Modelo"  required cdkFocusInitial>
-                        <mat-error *ngIf="form.get('modelo').hasError('required')">El Correo Electrónico es obligatorio</mat-error>
-                        
-                    </mat-form-field>
-                </div>
-                <div class="flex-row flex-xs-column flex-fill flex-gap">    
-                    <mat-form-field appearance="fill" class="flex-fill">
-                        <mat-label>TALLA: </mat-label>
-                        <input type="text" matInput autocomplete="off" formControlName="talla" placeholder="Talla"  required cdkFocusInitial>
-                        <mat-error *ngIf="form.get('talla').hasError('required')">El Correo Electrónico es obligatorio</mat-error>
-                        
-                    </mat-form-field>
-                </div>
-                <div class="flex-row flex-xs-column flex-fill flex-gap">    
-                    <mat-form-field appearance="fill" class="flex-fill">
-                        <mat-label>MIN: </mat-label>
-                        <input type="number" matInput autocomplete="off" formControlName="min" placeholder="Min"  required cdkFocusInitial>
-                        <mat-error *ngIf="form.get('min').hasError('required')">El Correo Electrónico es obligatorio</mat-error>
-                        
-                    </mat-form-field>
-                    <mat-form-field appearance="fill" class="flex-fill">
-                        <mat-label>MAX: </mat-label>
-                        <input type="number" matInput autocomplete="off" formControlName="max" placeholder="max"  required cdkFocusInitial>
-                        <mat-error *ngIf="form.get('max').hasError('required')">El Correo Electrónico es obligatorio</mat-error>
-                        
-                    </mat-form-field>
-                </div>
+    
+    <mat-tab-group>
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <mat-icon class="example-tab-icon">list</mat-icon>
+            FORMULARIO
+          </ng-template>
+          <section class="flex-fill flex-column" style="padding:8px; overflow: auto;">
+            <div class="flex-fill flex-column flex-gap">
+                <mat-card class="flex-column flex-gap xs-max-height-user-form" style="padding: 8px;" [formGroup]="form">
+                    <div class="flex-row flex-xs-column flex-fill flex-gap">
+                        <mat-form-field appearance="fill" class="flex-fill">
+                            <mat-label>DESCRIPCIÓN: </mat-label>
+                            <input type="text" matInput autocomplete="off" formControlName="descripcion" placeholder="Descripcion"  required cdkFocusInitial>
+                            <mat-error *ngIf="form.get('descripcion').hasError('required')">El Correo Electrónico es obligatorio</mat-error>
+                            
+                        </mat-form-field>
+                    </div>
+                    <div class="flex-row flex-xs-column flex-fill flex-gap"> 
+                        <mat-form-field appearance="fill" class="flex-fill">
+                            <mat-label>TIPO UNIDAD: </mat-label>
+                            <mat-select formControlName='catalogo_unidad_id'>
+                                <mat-option *ngFor="let item of unidades" [value]="item.id">{{ item.descripcion }}</mat-option>
+                            </mat-select>
+                        </mat-form-field>   
+                        <mat-form-field appearance="fill" class="flex-fill">
+                            <mat-label>MARCA: </mat-label>
+                            <input type="text" matInput autocomplete="off" formControlName="marca" placeholder="Marca"  required cdkFocusInitial>
+                            <mat-error *ngIf="form.get('marca').hasError('required')">El Correo Electrónico es obligatorio</mat-error>
+                            
+                        </mat-form-field>
+                    </div>
+                    <div class="flex-row flex-xs-column flex-fill flex-gap">    
+                        <mat-form-field appearance="fill" class="flex-fill">
+                            <mat-label>MODELO: </mat-label>
+                            <input type="text" matInput autocomplete="off" formControlName="modelo" placeholder="Modelo"  required cdkFocusInitial>
+                            <mat-error *ngIf="form.get('modelo').hasError('required')">El Correo Electrónico es obligatorio</mat-error>
+                            
+                        </mat-form-field>
+                    </div>
+                    <div class="flex-row flex-xs-column flex-fill flex-gap">    
+                        <mat-form-field appearance="fill" class="flex-fill">
+                            <mat-label>TALLA: </mat-label>
+                            <input type="text" matInput autocomplete="off" formControlName="talla" placeholder="Talla"  required cdkFocusInitial>
+                            <mat-error *ngIf="form.get('talla').hasError('required')">El Correo Electrónico es obligatorio</mat-error>
+                            
+                        </mat-form-field>
+                    </div>
+                    <div class="flex-row flex-xs-column flex-fill flex-gap">    
+                        <mat-form-field appearance="fill" class="flex-fill">
+                            <mat-label>MIN: </mat-label>
+                            <input type="number" matInput autocomplete="off" formControlName="min" placeholder="Min"  required cdkFocusInitial>
+                            <mat-error *ngIf="form.get('min').hasError('required')">El Correo Electrónico es obligatorio</mat-error>
+                            
+                        </mat-form-field>
+                        <mat-form-field appearance="fill" class="flex-fill">
+                            <mat-label>MAX: </mat-label>
+                            <input type="number" matInput autocomplete="off" formControlName="max" placeholder="max"  required cdkFocusInitial>
+                            <mat-error *ngIf="form.get('max').hasError('required')">El Correo Electrónico es obligatorio</mat-error>
+                            
+                        </mat-form-field>
+                    </div>
+                </mat-card>
+            </div>
+        </section>
+        </mat-tab>
+      
+        <!--mat-tab>
+          <ng-template mat-tab-label>
+            <mat-icon class="example-tab-icon">image</mat-icon>
+            IMAGEN
+          </ng-template>
+          <section fxFlex="100" fxFlex.xs="100">
+            <mat-card>
+                <mat-card-content>
+                    <div fxLayout="row" fxLayout.xs="column" fxLayoutGap="3px">
+                        <div fxFlex="70" fxFlex.xs="100">
+                            <div fxLayout="row" fxLayout.xs="column" fxLayoutGap="3px">
+                                <div fxFlex="100" fxFlex.xs="100">
+                                    <input type="file" (change)="fileChangeEvent($event)" accept="image/jpeg" />
+                                </div>
+                            </div>
+                            <div fxLayout="row" fxLayout.xs="column" fxLayoutGap="3px">
+                                <div fxFlex="70" fxFlex.xs="100">
+                                    <image-cropper [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="true" autoCrop="false" [imageQuality]="95" [aspectRatio]="1 / 1" [resizeToWidth]="256" alignImage="center" format="jpeg" (imageCropped)="imageCropped($event)" (imageLoaded)="imageLoaded()"
+                                        (cropperReady)="cropperReady()" (loadImageFailed)="loadImageFailed()"></image-cropper>
+                                    <div>
+                                        Seleccionar Imagen
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div fxFlex="30" fxFlex.xs="100">
+                            <div fxLayout="row" fxLayout.xs="column" fxLayoutGap="0px">
+                                <div fxFlex="100" fxFlex.xs="100">
+                                    <h5>Vista Previa</h5>
+                                    <img [src]="croppedImage" width="70%" />
+                                </div>
+                            </div>
+                            <div fxLayout="row" fxLayout.xs="column" fxLayoutGap="0px">
+                                <div fxFlex="100" fxFlex.xs="100">
+                                    <button mat-raised-button color="success" (click)="subirFoto()">
+                                        <mat-icon>save</mat-icon> GUARDAR
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </mat-card-content>
             </mat-card>
-        </div>
-    </section>
+        </section>
+        </mat-tab-->
+      </mat-tab-group>
+
+    
 </div>

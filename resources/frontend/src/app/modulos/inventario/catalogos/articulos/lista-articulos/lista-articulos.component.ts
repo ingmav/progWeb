@@ -95,8 +95,8 @@ export class ListaArticulosComponent {
   openDialog(registro?){
     let dialogConfig:any = {
       maxWidth: '100%',
-      width: '30%',
-      height: '500px',
+      width: '100%',
+      height: '100%',
       disableClose: true,
       data:{}
     };

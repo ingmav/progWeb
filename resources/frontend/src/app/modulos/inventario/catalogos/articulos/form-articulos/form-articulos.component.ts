@@ -4,6 +4,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { AlertPanelComponent } from 'src/app/shared/components/alert-panel/alert-panel.component';
+import { ImageCroppedEvent, ImageCropperComponent }  from 'ngx-image-cropper';
 
 //Para checar tamaño de la pantalla
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
@@ -12,6 +13,7 @@ import {takeUntil} from 'rxjs/operators';
 import { CustomValidator } from 'src/app/utils/classes/custom-validator';
 import { DialogConfirmActionComponent } from 'src/app/shared/components/dialog-confirm-action/dialog-confirm-action.component';
 import { ServicioArticuloService } from '../servicio-articulo.service';
+import { ImageCropperModule } from 'ngx-image-cropper';
 
 export interface DialogData {
   id: number;
@@ -28,12 +30,13 @@ export interface DialogData {
 @Component({
   selector: 'app-form-articulos',
   standalone: true,
-  imports: [ SharedModule,],
+  imports: [ SharedModule, ImageCropperModule],
   templateUrl: './form-articulos.component.html',
   styleUrl: './form-articulos.component.css'
 })
 export class FormArticulosComponent {
   @ViewChild(AlertPanelComponent) alertPanel: AlertPanelComponent;
+  @ViewChild(ImageCropperComponent)imageCropper: ImageCropperComponent;
 
   constructor(
     public dialogRef: MatDialogRef<FormArticulosComponent>,
@@ -81,6 +84,9 @@ export class FormArticulosComponent {
   
   unidades:any[];
   changesDetected:boolean = false;
+  imageChangedEvent: any = '';
+  croppedImage: any = '';
+  FotoCredencial:File  = null;
   
   ngOnInit(): void {
     this.savedData = false;
@@ -167,6 +173,61 @@ export class FormArticulosComponent {
         }
       });
     }
+  }
+
+  subirFoto()
+  {
+    /*let data = {'trabajador_id': this.data.trabajador_id};
+    this.saludService.upload(data, this.FotoCredencial, '').subscribe(
+      response => {
+        this.dialogRef.close(true);
+        this.sharedService.showSnackBar("Ha subido correctamente el documento", null, 3000);
+      }, errorResponse => {
+        this.sharedService.showSnackBar(errorResponse.error.error, null, 3000);
+      });*/
+  }
+
+  imageLoaded() {
+    // show cropper
+  }
+  cropperReady() {
+      // cropper ready
+  }
+  loadImageFailed() {
+      // show message
+  }
+
+  cortar()
+  {
+    this.imageCropped(this.imageCropper.crop());
+  }
+
+  fileChangeEvent(event: any): void {
+    this.imageChangedEvent = event;
+    console.log(this.imageChangedEvent);
+  }
+  
+  imageCropped(event: ImageCroppedEvent) {
+    this.croppedImage = event.base64;
+    this.FotoCredencial = this.base64ToFile(
+      event.base64,
+      this.imageChangedEvent.target.files[0].name,
+    );
+  }
+
+  base64ToFile(data, filename) {
+
+    const arr = data.split(',');
+    const mime = arr[0].match(/:(.*?);/)[1];
+    const bstr = atob(arr[1]);
+    let n = bstr.length;
+    let u8arr = new Uint8Array(n);
+
+    while(n--){
+        u8arr[n] = bstr.charCodeAt(n);
+    }
+
+    return new File([u8arr], filename, { type: mime });
   }
 
   resizeDialog(){

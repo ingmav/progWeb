@@ -113,7 +113,7 @@ class InventarioController extends Controller
                     
                     if($obj->tipo_movto == 2)
                     {
-                        $obj_movto->articulo_id = $parametros['articulos'][$i]['persona_id'];
+                        $obj_movto->personal_id = $parametros['articulos'][$i]['persona_id'];
                     }
                     
                     $obj_movto->cantidad = $parametros['articulos'][$i]['cantidad'];

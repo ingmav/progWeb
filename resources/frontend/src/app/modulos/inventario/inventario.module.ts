@@ -10,6 +10,7 @@ import { MovimientoComponent } from './principal/movimiento/movimiento.component
 import { CardexComponent } from './principal/cardex/cardex.component';
 
 
+
 @NgModule({
   declarations: [
     ListaComponent,
@@ -21,7 +22,8 @@ import { CardexComponent } from './principal/cardex/cardex.component';
   imports: [
     CommonModule,
     SharedModule,
-    InventarioRoutingModule
+    InventarioRoutingModule,
+    
   ]
 })
 export class InventarioModule { }
