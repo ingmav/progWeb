@@ -2,18 +2,14 @@ import { Component, Inject, OnInit, OnDestroy, ViewChild, ElementRef } from '@an
 import { SharedModule } from 'src/app/shared/shared.module';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MatTableDataSource } from '@angular/material/table';
 import { AlertPanelComponent } from 'src/app/shared/components/alert-panel/alert-panel.component';
-import { ImageCroppedEvent, ImageCropperComponent }  from 'ngx-image-cropper';
-
+import { Observable } from 'rxjs';
 //Para checar tamaño de la pantalla
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
-import { CustomValidator } from 'src/app/utils/classes/custom-validator';
-import { DialogConfirmActionComponent } from 'src/app/shared/components/dialog-confirm-action/dialog-confirm-action.component';
 import { ServicioArticuloService } from '../servicio-articulo.service';
-import { ImageCropperModule } from 'ngx-image-cropper';
+
 
 export interface DialogData {
   id: number;
@@ -25,18 +21,18 @@ export interface DialogData {
   //inventario: number;
   min: number;
   max: number;
+  extension: string;
 }
 
 @Component({
   selector: 'app-form-articulos',
   standalone: true,
-  imports: [ SharedModule, ImageCropperModule],
+  imports: [ SharedModule],
   templateUrl: './form-articulos.component.html',
   styleUrl: './form-articulos.component.css'
 })
 export class FormArticulosComponent {
   @ViewChild(AlertPanelComponent) alertPanel: AlertPanelComponent;
-  @ViewChild(ImageCropperComponent)imageCropper: ImageCropperComponent;
 
   constructor(
     public dialogRef: MatDialogRef<FormArticulosComponent>,
@@ -77,16 +73,20 @@ export class FormArticulosComponent {
   isLoading:boolean;
   isSaving:boolean;
   dialogMaxSize:boolean;
+  changesDetected:boolean = false;
 
   savedData:boolean;
 
   form:FormGroup;
+  selectedFiles?: FileList;
+  currentFile?: File;
+  progress = 0;
+  message = '';
+  preview = '';
+
+  imageInfos?: Observable<any>;
   
   unidades:any[];
-  changesDetected:boolean = false;
-  imageChangedEvent: any = '';
-  croppedImage: any = '';
-  FotoCredencial:File  = null;
   
   ngOnInit(): void {
     this.savedData = false;
@@ -106,8 +106,37 @@ export class FormArticulosComponent {
       'max':             ['',[Validators.required]],
       
     });
+console.log(this.inData.extension);
+    if(this.inData.extension != null)
+    {
+      this.cargarImagen();
+    }
+  }
 
-    
+  cargarImagen()
+  {
+    this.servicioArticuloService.verImagen({id: this.inData.id}).subscribe({
+      next:(response:any)=>{
+        console.log(response);
+        this.preview = "data:image/png;base64,"+response.image;
+      },
+      error:(response:any)=>{
+        if(response.error.error_type == 'form_validation'){
+          for (const key in response.error.data) {
+            if (Object.prototype.hasOwnProperty.call(response.error.data, key)) {
+              const element = response.error.data[key];
+              let error:any = {};
+              error[element] = true;
+              this.form.get(key).setErrors(error);
+            }
+          }
+          this.alertPanel.showError(response.error.message);
+        }else{
+          this.alertPanel.showError(response.error.message);
+        }
+        this.isSaving = false;
+      }
+    });
   }
 
   cargarCatalogo()
@@ -175,61 +204,6 @@ export class FormArticulosComponent {
     }
   }
 
-  subirFoto()
-  {
-    /*let data = {'trabajador_id': this.data.trabajador_id};
-    this.saludService.upload(data, this.FotoCredencial, '').subscribe(
-      response => {
-        this.dialogRef.close(true);
-        this.sharedService.showSnackBar("Ha subido correctamente el documento", null, 3000);
-      }, errorResponse => {
-        this.sharedService.showSnackBar(errorResponse.error.error, null, 3000);
-      });*/
-  }
-
-  imageLoaded() {
-    // show cropper
-  }
-  cropperReady() {
-      // cropper ready
-  }
-  loadImageFailed() {
-      // show message
-  }
-
-  cortar()
-  {
-    this.imageCropped(this.imageCropper.crop());
-  }
-
-  fileChangeEvent(event: any): void {
-    this.imageChangedEvent = event;
-    console.log(this.imageChangedEvent);
-  }
-  
-  imageCropped(event: ImageCroppedEvent) {
-    this.croppedImage = event.base64;
-    this.FotoCredencial = this.base64ToFile(
-      event.base64,
-      this.imageChangedEvent.target.files[0].name,
-    );
-  }
-
-  base64ToFile(data, filename) {
-
-    const arr = data.split(',');
-    const mime = arr[0].match(/:(.*?);/)[1];
-    const bstr = atob(arr[1]);
-    let n = bstr.length;
-    let u8arr = new Uint8Array(n);
-
-    while(n--){
-        u8arr[n] = bstr.charCodeAt(n);
-    }
-
-    return new File([u8arr], filename, { type: mime });
-  }
-
   resizeDialog(){
     if(!this.dialogMaxSize){
       this.dialogRef.updateSize('100%', '100%');
@@ -246,5 +220,66 @@ export class FormArticulosComponent {
 
   cerrar(){
     this.dialogRef.close(this.savedData);
+  }
+
+  selectFile(event: any): void {
+    this.message = '';
+    this.preview = '';
+    this.progress = 0;
+    this.selectedFiles = event.target.files;
+  
+    if (this.selectedFiles) {
+      const file: File | null = this.selectedFiles.item(0);
+  
+      if (file) {
+        this.preview = '';
+        this.currentFile = file;
+  
+        const reader = new FileReader();
+  
+        reader.onload = (e: any) => {
+          console.log(e.target.result);
+          this.preview = e.target.result;
+        };
+        console.log(this.preview);
+        reader.readAsDataURL(this.currentFile);
+      }
+    }
+  }
+
+  upload(): void {
+    this.progress = 0;
+  
+    if (this.selectedFiles) {
+      const file: File | null = this.selectedFiles.item(0);
+  
+      if (file) {
+        this.currentFile = file;
+        let data = {'articulo_id': this.inData.id};
+        this.servicioArticuloService.SubirImagen(data,file).subscribe({
+          next:(response:any)=>{
+           
+          },
+          error:(response:any)=>{
+            if(response.error.error_type == 'form_validation'){
+              for (const key in response.error.data) {
+                if (Object.prototype.hasOwnProperty.call(response.error.data, key)) {
+                  const element = response.error.data[key];
+                  let error:any = {};
+                  error[element] = true;
+                  this.form.get(key).setErrors(error);
+                }
+              }
+              this.alertPanel.showError(response.error.message);
+            }else{
+              this.alertPanel.showError(response.error.message);
+            }
+            this.isSaving = false;
+          }
+        });
+      }
+  
+      this.selectedFiles = undefined;
+    }
   }
 }

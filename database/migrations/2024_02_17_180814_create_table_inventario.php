@@ -13,7 +13,7 @@ class CreateTableInventario extends Migration
      */
     public function up()
     {
-        /*Schema::create('catalogo_unidad', function (Blueprint $table) {
+        Schema::create('catalogo_unidad', function (Blueprint $table) {
             $table->smallIncrements("id");
             $table->string("descripcion", 255);
             $table->string("abreviatura", 50);
@@ -59,7 +59,7 @@ class CreateTableInventario extends Migration
             $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
             $table->softDeletes();
-        });*/
+        });
 
         Schema::create('movtos', function (Blueprint $table) {
             $table->id();
@@ -112,13 +112,13 @@ class CreateTableInventario extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('descripcion_articulo');
+        //Schema::dropIfExists('descripcion_articulo');
         Schema::dropIfExists('movtos_detalles');
         //Schema::dropIfExists('catalogo_articulos');
         Schema::dropIfExists('movtos');
-        //Schema::dropIfExists('catalogo_unidad');
-        //Schema::dropIfExists('catalogo_calidad');
-        //Schema::dropIfExists('catalogo_personal');
+        Schema::dropIfExists('catalogo_unidad');
+        Schema::dropIfExists('catalogo_calidad');
+        Schema::dropIfExists('catalogo_personal');
         
     }
 }

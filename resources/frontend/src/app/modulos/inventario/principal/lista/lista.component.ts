@@ -7,6 +7,7 @@ import { AuthService } from 'src/app/auth/auth.service';
 import { ServicioService } from '../../servicio.service';
 import { MovimientoComponent } from '../movimiento/movimiento.component';
 import { CardexComponent } from '../cardex/cardex.component';
+import { VerImagenComponent } from '../../catalogos/articulos/ver-imagen/ver-imagen.component';
 
 @Component({
   selector: 'app-lista',
@@ -32,7 +33,7 @@ export class ListaComponent {
   searchQuery:string;
 
   pageSize:number = 50;
-  displayedColumns: string[] = ['descripcion','datos','inventario','ultimo_movimiento'];
+  displayedColumns: string[] = ['descripcion','datos','inventario','imagen','ultimo_movimiento'];
   resultsLength = 0;
   data:any;
 
@@ -62,6 +63,23 @@ export class ListaComponent {
 
   cleanSearch(){
     this.searchQuery = '';
+  }
+
+  VerImagen(registro?){
+    let dialogConfig:any = {
+      maxWidth: '100%',
+      disableClose: true,
+      data:{ id: registro.id}
+    };
+    
+    const dialogRef = this.dialog.open(VerImagenComponent,dialogConfig);
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+      if(result){
+        this.applySearch();
+      }
+    });
   }
 
   applySearch(){
@@ -114,11 +132,9 @@ export class ListaComponent {
 
   }
   openDialogCardex(obj?){
-    console.log(obj);
     let dialogConfig:any = {
       maxWidth: '100%',
       width: '100%',
-      height: '100%',
       disableClose: true,
       data:{ 
         id:obj.id,
@@ -128,7 +144,8 @@ export class ListaComponent {
         talla:obj.talla,
         inventario:obj.inventario,
         max:obj.max,
-        min:obj.min
+        min:obj.min,
+        extension:obj.extension
       }
     };
 

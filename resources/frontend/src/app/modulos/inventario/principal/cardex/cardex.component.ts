@@ -18,7 +18,8 @@ export interface DialogData {
   talla:string;
   inventario:any;
   max:any;
-  min:any
+  min:any;
+  extension:string;
 }
 
 @Component({
@@ -34,6 +35,7 @@ export class CardexComponent {
   isSaving:boolean = false;
   dialogMaxSize:boolean;
   isLoadingResults:boolean;
+  preview:string;
   
   displayedColumns: string[] = ['tipo','cantidad','persona','fecha'];
   data:any;
@@ -80,15 +82,43 @@ export class CardexComponent {
   ngOnInit(): void {
     this.dialogRef.addPanelClass('no-padding-dialog');
     this.cargarCardex(null);
+    if(this.inData.extension!= null)
+    {
+      this.cargarImagen();
+    }
+    
+  }
+
+  cargarImagen()
+  {
+    this.servicioService.verImagen({id: this.inData.id}).subscribe({
+      next:(response:any)=>{
+        if(response.image!='')
+        {
+          this.preview = "data:image/png;base64,"+response.image;
+        }
+      },
+      error:(response:any)=>{
+        if(response.error.error_type == 'form_validation'){
+          for (const key in response.error.data) {
+            if (Object.prototype.hasOwnProperty.call(response.error.data, key)) {
+              const element = response.error.data[key];
+              let error:any = {};
+              error[element] = true;
+            }
+          }
+          this.alertPanel.showError(response.error.message);
+        }else{
+          this.alertPanel.showError(response.error.message);
+        }
+        this.isSaving = false;
+      }
+    });
   }
 
   cargarCardex(event?)
   {
     let params:any = {};
-
-    //console.log(this.filtro);
-
-    
     if(!event){
       params.page= 1; 
       params.per_page= this.pageSize;
@@ -98,7 +128,8 @@ export class CardexComponent {
     }
     return this.servicioService.obtenerCardex(this.inData.id,params).subscribe({
       next:(response:any) => {
-       this.data = response.cardex.data;
+       console.log(response);
+        this.data = response.cardex.data;
        this.resultsLength = response.cardex.total;
           
        console.log(response); 

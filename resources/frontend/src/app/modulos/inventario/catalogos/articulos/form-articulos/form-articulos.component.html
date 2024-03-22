@@ -89,7 +89,7 @@
         </section>
         </mat-tab>
       
-        <!--mat-tab>
+        <mat-tab>
           <ng-template mat-tab-label>
             <mat-icon class="example-tab-icon">image</mat-icon>
             IMAGEN
@@ -97,43 +97,39 @@
           <section fxFlex="100" fxFlex.xs="100">
             <mat-card>
                 <mat-card-content>
-                    <div fxLayout="row" fxLayout.xs="column" fxLayoutGap="3px">
-                        <div fxFlex="70" fxFlex.xs="100">
-                            <div fxLayout="row" fxLayout.xs="column" fxLayoutGap="3px">
-                                <div fxFlex="100" fxFlex.xs="100">
-                                    <input type="file" (change)="fileChangeEvent($event)" accept="image/jpeg" />
+                    <div class="flex-row flex-xs-column flex-fill flex-gap"> 
+                        <div class="flex-fill">
+                            <div appearance="fill" class="flex-fill">
+                                <div *ngIf="preview!=''" style="text-align: center;">
+                                    <img [src]="preview" class="preview">
+                                </div>
+                                <div  *ngIf="preview==''" class="sin_imagen">
+                                    SIN IMAGEN
                                 </div>
                             </div>
-                            <div fxLayout="row" fxLayout.xs="column" fxLayoutGap="3px">
-                                <div fxFlex="70" fxFlex.xs="100">
-                                    <image-cropper [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="true" autoCrop="false" [imageQuality]="95" [aspectRatio]="1 / 1" [resizeToWidth]="256" alignImage="center" format="jpeg" (imageCropped)="imageCropped($event)" (imageLoaded)="imageLoaded()"
-                                        (cropperReady)="cropperReady()" (loadImageFailed)="loadImageFailed()"></image-cropper>
-                                    <div>
-                                        Seleccionar Imagen
-                                    </div>
-                                </div>
+                            <div appearance="fill" class="flex-fill" style="text-align: center;">
+                                <label for="file-upload" class="custom-file-upload">
+                                    BUSCAR ARCHIVO
+                                </label>
+                            <input matInput type="file" accept="image/*" id="file-upload" (change)="selectFile($event)" />
                             </div>
+                            <div appearance="fill" class="flex-fill" style="text-align: center; margin-top: 10px;">
+                                <button mat-fab extended
+                                    [disabled]="!selectedFiles"
+                                    (click)="upload()">
+                                    <mat-icon>cloud_upload</mat-icon>
+                                    SUBIR IMAGEN
+                                </button>
+                            </div>
+                            
                         </div>
-                        <div fxFlex="30" fxFlex.xs="100">
-                            <div fxLayout="row" fxLayout.xs="column" fxLayoutGap="0px">
-                                <div fxFlex="100" fxFlex.xs="100">
-                                    <h5>Vista Previa</h5>
-                                    <img [src]="croppedImage" width="70%" />
-                                </div>
-                            </div>
-                            <div fxLayout="row" fxLayout.xs="column" fxLayoutGap="0px">
-                                <div fxFlex="100" fxFlex.xs="100">
-                                    <button mat-raised-button color="success" (click)="subirFoto()">
-                                        <mat-icon>save</mat-icon> GUARDAR
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                        
+                    </div>    
+                      
                 </mat-card-content>
             </mat-card>
         </section>
-        </mat-tab-->
+        </mat-tab>
       </mat-tab-group>
 
     

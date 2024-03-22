@@ -54,3 +54,17 @@ table > th{
     padding: 5px; 
     border-right: 1px solid white;
 }
+
+.preview
+{
+    width: 250px;
+    min-height: 400px;
+}
+
+.main-list-table 
+{
+    overflow: auto;
+    flex: 1 1 auto;
+    overflow-y: auto;
+    height: auto;
+}

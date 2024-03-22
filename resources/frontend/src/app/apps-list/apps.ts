@@ -32,7 +32,7 @@ export const APPS:App [] = [
         },
       ],
     },
-    { name:'Control de Acceso', route: "control-acceso",  icon: "assets/icons/control-acceso.svg", 
+    { name:'Control de Acceso', route: "control-acceso",  icon: "assets/icons/control-acceso.svg",        permission:"hr5UhgMTDmF9EiLYeq5x0cz0e281IWRU", 
         menu:[
             {
                 name:'Administrar',
@@ -58,17 +58,17 @@ export const APPS:App [] = [
             {
                 name:'Inventario',
                 icon: 'menu_open',
-                identificador:'administracion',
+                identificador:'inventario',
                 children:[
-                    { name:"Listado",      route: "inventario-higiene/listado",          icon: "inbox",        permission:"bTCHPgL2Ovp0UslpRjS38HCp0N93o2zt" },
+                    { name:"Listado",      route: "inventario-higiene/listado",          icon: "inbox" },
             ]},
             {
                 name:'Catalogos',
                 icon: 'drag_indicator',
-                identificador:'configuracion',
+                identificador:'catalogos_articulos',
                 children:[
-                    { name:'Artículos',      route: "inventario-higiene/articulos",          icon: "bookmark",                    /*permission:"tTVayONYIDylH9dk7jg5143h0FKoSpBi"*/ },
-                    { name:'Personal',      route: "inventario-higiene/personal",          icon: "person_pin",                    /*permission:"tTVayONYIDylH9dk7jg5143h0FKoSpBi"*/ },
+                    { name:'Artículos',      route: "inventario-higiene/articulos",          icon: "bookmark",                    permission:"tTVayONYIDylH9dk7jg5143h0FKoSpBi" },
+                    { name:'Personal',      route: "inventario-higiene/personal",          icon: "person_pin",                    permission:"tTVayONYIDylH9dk7jg5143h0FKoSpBi" },
                 ]
             }
         ] 

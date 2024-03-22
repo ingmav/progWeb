@@ -7,6 +7,7 @@ import { AuthService } from 'src/app/auth/auth.service';
 import { ServicioArticuloService } from '../servicio-articulo.service';
 import { FormArticulosComponent } from '../form-articulos/form-articulos.component';
 import { DialogConfirmActionComponent } from 'src/app/shared/components/dialog-confirm-action/dialog-confirm-action.component';
+import { VerImagenComponent } from '../ver-imagen/ver-imagen.component';
 
 
 @Component({
@@ -32,7 +33,7 @@ export class ListaArticulosComponent {
   searchQuery:string;
 
   pageSize:number = 50;
-  displayedColumns: string[] = ['descripcion','datos','inventario','ultimo_movimiento'];
+  displayedColumns: string[] = ['descripcion','datos','inventario','imagen','ultimo_movimiento'];
   resultsLength = 0;
   data:any;
 
@@ -95,7 +96,7 @@ export class ListaArticulosComponent {
   openDialog(registro?){
     let dialogConfig:any = {
       maxWidth: '100%',
-      width: '100%',
+      width: '70%',
       height: '100%',
       disableClose: true,
       data:{}
@@ -111,6 +112,7 @@ export class ListaArticulosComponent {
       dialogConfig.data.max                = registro.max;
       dialogConfig.data.min                = registro.min;
       dialogConfig.data.catalogo_unidad_id = registro.catalogo_unidad_id
+      dialogConfig.data.extension = registro.extension
     }else
     {
       dialogConfig.data.id = 0;
@@ -118,6 +120,23 @@ export class ListaArticulosComponent {
     console.log(dialogConfig);
 
     const dialogRef = this.dialog.open(FormArticulosComponent,dialogConfig);
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+      if(result){
+        this.applySearch();
+      }
+    });
+  }
+
+  VerImagen(registro?){
+    let dialogConfig:any = {
+      maxWidth: '100%',
+      disableClose: true,
+      data:{ id: registro.id}
+    };
+    
+    const dialogRef = this.dialog.open(VerImagenComponent,dialogConfig);
 
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);

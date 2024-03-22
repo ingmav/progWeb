@@ -54,6 +54,8 @@ Route::group(['middleware'=>'auth'],function($router){
     Route::get('catalogo-unidad',                   'API\Modulos\Inventario\ArticuloController@catalogoUnidad');
     Route::get('catalogos',                         'API\Modulos\Inventario\ArticuloController@catalogos');
     Route::get('cardex/{id}',                            'API\Modulos\Inventario\ArticuloController@cardex');
+    Route::post('subir-imagen',                     'API\Modulos\Inventario\ArticuloController@SubirImagen');
+    Route::get('ver-imagen',                     'API\Modulos\Inventario\ArticuloController@VerImagen');
 });
 
 Route::middleware('auth')->get('/avatar-images', function (Request $request) {

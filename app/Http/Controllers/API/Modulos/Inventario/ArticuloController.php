@@ -186,4 +186,58 @@ class ArticuloController extends Controller
             throw new \App\Exceptions\LogError('Ocurrio un error al intentar eliminar el rol',0,$e);
         }
     }
+
+    public function SubirImagen(Request $request)
+    {
+        ini_set('memory_limit', '-1');
+        
+        $mensajes = [
+            
+            'required'      => "required",
+            'email'         => "email",
+            'unique'        => "unique"
+        ];
+        $inputs = $request->all();
+        $reglas = [
+            'id'       => 'required',
+        ];
+        DB::beginTransaction();
+        $v = Validator::make($inputs, $reglas, $mensajes);
+        if ($v->fails()) {
+            return response()->json(['error' => "Hace falta campos obligatorios. ".$v->errors() ], HttpResponse::HTTP_CONFLICT);
+        }
+
+        try{  
+            if($request->hasFile('archivo')) {
+                
+                $extension = $request->file('archivo')->getClientOriginalExtension();
+                $name = $inputs['id'].".".$extension;
+                $request->file("archivo")->storeAs("public/Articulo", $name);
+            
+                $object_rel = CatalogoArticulos::find($inputs['id']);
+                $object_rel->extension = $extension;
+                $object_rel->save();
+
+                DB::commit();
+            }
+            return response()->json(['data'=>1],HttpResponse::HTTP_OK);
+        }catch(\Exception $e){
+            DB::rollback();
+            return response()->json(['error'=>['message'=>$e->getMessage(),'line'=>$e->getLine()]], HttpResponse::HTTP_CONFLICT);
+        }
+    }
+
+    public function VerImagen(Request $request)
+    {
+        $inputs = $request->all();
+        try{  
+            $object_rel = CatalogoArticulos::find($inputs['id']);
+            $image = base64_encode(\Storage::get('public\\Articulo\\'.$inputs['id'].'.'.$object_rel->extension));
+            
+            return response()->json(['image'=>$image],HttpResponse::HTTP_OK);
+        }catch(\Exception $e){
+            DB::rollback();
+            return response()->json(['error'=>['message'=>$e->getMessage(),'line'=>$e->getLine()]], HttpResponse::HTTP_CONFLICT);
+        }
+    }
 }

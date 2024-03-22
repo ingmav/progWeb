@@ -54,6 +54,14 @@
                     </td>
                 </ng-container>
 
+                <ng-container matColumnDef="imagen">
+                    <th mat-header-cell *matHeaderCellDef class="hide-xs">FOTO</th>
+                    <td mat-cell *matCellDef="let row" class="hide-xs">
+                        <div *ngIf="row.extension != null">
+                            <mat-icon (click)="VerImagen(row)">image</mat-icon>
+                        </div>          
+                    </td>
+                </ng-container>
                 
                 <ng-container matColumnDef="ultimo_movimiento">
                     <th width="1" style="white-space: nowrap;" mat-header-cell *matHeaderCellDef mat-sort-header>Ultimo Movimiento</th>

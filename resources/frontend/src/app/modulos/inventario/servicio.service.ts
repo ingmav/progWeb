@@ -11,6 +11,7 @@ export class ServicioService {
   url_principal            = `${environment.base_url}/inventario`;
   url_catalogos            = `${environment.base_url}/catalogos`;
   url_cardex               = `${environment.base_url}/cardex`;
+  url_ver_imagen           = `${environment.base_url}/ver-imagen`;
   
   constructor(private http: HttpClient) { }
   
@@ -55,6 +56,14 @@ export class ServicioService {
   
   obtenerCardex(id, payload):Observable<any> {
     return this.http.get<any>(this.url_cardex+"/"+id, {params: payload}).pipe(
+      map( response => {
+        return response;
+      })
+    );
+  }
+
+  verImagen(payload):Observable<any> {
+    return this.http.get<any>(this.url_ver_imagen, {params: payload}).pipe(
       map( response => {
         return response;
       })
