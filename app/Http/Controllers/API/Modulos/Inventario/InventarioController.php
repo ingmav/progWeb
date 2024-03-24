@@ -94,7 +94,7 @@ class InventarioController extends Controller
                 {
                     $obj = new Movtos();
                 }
-                $obj->proveedor = $parametros['proveedor'];
+                $obj->proveedor = strtoupper($parametros['proveedor']);
                 $obj->fecha_movimiento = $parametros['fecha_movimiento'];
                 $cantidad_total = 0;
                 
@@ -109,23 +109,24 @@ class InventarioController extends Controller
 
                     $obj_movto = new MovtosDetalles();
                     $obj_movto->movtos_id = $obj->id;
-                    $obj_movto->articulo_id = $parametros['articulos'][$i]['id'];
+                    $registro =  $parametros['articulos'][$i];
+                    $obj_movto->articulo_id = $registro['articulo']['id'];
                     
                     if($obj->tipo_movto == 2)
                     {
-                        $obj_movto->catalogo_personal_id = $parametros['articulos'][$i]['persona_id'];
+                        $obj_movto->catalogo_personal_id = $registro['persona']['id'];
                     }
                     
-                    $obj_movto->cantidad = $parametros['articulos'][$i]['cantidad'];
+                    $obj_movto->cantidad = $registro['cantidad'];
                 
                     $obj_movto->save();
-                    $cantidad_total += $parametros['articulos'][$i]['cantidad'];
-                    if(!isset($arreglo_aux[$parametros['articulos'][$i]['id']]))
+                    $cantidad_total += $registro['cantidad'];
+                    if(!isset($arreglo_aux[$registro['articulo']['id']]))
                     {
-                        $arreglo_aux[$parametros['articulos'][$i]['id']] = 0;
+                        $arreglo_aux[$registro['articulo']['id']] = 0;
                     }
-                    $arreglo_aux[$parametros['articulos'][$i]['id']] += $parametros['articulos'][$i]['cantidad'];
-                    $arreglo_indices [] = $parametros['articulos'][$i]['id'];
+                    $arreglo_aux[$registro['articulo']['id']] += $registro['cantidad'];
+                    $arreglo_indices [] = $registro['articulo']['id'];
                 }
                 $obj->cantidad_total = $cantidad_total;
                 

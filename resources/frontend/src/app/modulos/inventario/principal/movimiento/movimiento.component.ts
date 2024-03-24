@@ -129,10 +129,7 @@ export class MovimientoComponent {
         return this.servicioService.obtenerCatalogos({}).subscribe({
           next:(response:any) => {
             this.filterCatalogs.articulo = response.articulo;
-            this.form.patchValue({articulo_ingresar:result.data.id});
-            console.log(this.form.value);
-            console.log(result.id);
-            console.log(response.articulo);
+            this.form.patchValue({articulo_ingresar:result.data});
             },
           error:(response:any) => {
             this.alertPanel.showError(response.error.message);
@@ -159,7 +156,7 @@ export class MovimientoComponent {
         return this.servicioService.obtenerCatalogos({}).subscribe({
           next:(response:any) => {
             this.filterCatalogs.personal = response.personal;
-            this.form.patchValue({trabajador_ingresar:result.data.id});
+            this.form.patchValue({trabajador_ingresar:result.data});
             },
           error:(response:any) => {
             this.alertPanel.showError(response.error.message);
@@ -176,14 +173,29 @@ export class MovimientoComponent {
       next:(response:any) => {
         this.filterCatalogs.articulo = response.articulo;
         this.filterCatalogs.personal = response.personal;
-        //this.filteredCatalogs['articulo'] = this.form.controls['articulo_ingresar'].valueChanges.pipe(startWith(''),map(value => this._filter(value,'articulo','descripcion')));
-        //this.filteredCatalogs['personal'] = this.form.controls['trabajador_ingresar'].valueChanges.pipe(startWith(''),map(value => this._filter(value,'personal','descripcion')));
+        this.filteredCatalogs['articulo'] = this.form.controls['articulo_ingresar'].valueChanges.pipe(startWith(''),map(value => this._filter(value,'articulo','descripcion')));
+        this.filteredCatalogs['personal'] = this.form.controls['trabajador_ingresar'].valueChanges.pipe(startWith(''),map(value => this._filter(value,'personal','descripcion')));
       },
       error:(response:any) => {
         this.alertPanel.showError(response.error.message);
       }
     });
     
+  }
+
+  private _filter(value: any, catalog: string, valueField: string): string[] {
+    console.log(value);
+    console.log(catalog);
+    console.log(valueField);
+    let filterValue = '';
+    if(value){
+      if(typeof(value) == 'object'){
+        filterValue = value[valueField].toLowerCase();
+      }else{
+        filterValue = value.toLowerCase();
+      }
+    }
+    return this.filterCatalogs[catalog].filter(option => option[valueField].toLowerCase().includes(filterValue));
   }
 
   tipoMovto(value)
@@ -203,11 +215,13 @@ export class MovimientoComponent {
     let datos =  this.form.value;
     datos.articulos = this.dataSource;
     datos.fecha_movimiento = this.filtroFechaStart;
+    this.isLoading = true; 
     return this.servicioService.crearElemento(datos).subscribe({
       next:(response:any) => {
         this.dialogRef.close(true);
       },
       error:(response:any) => {
+        this.isLoading = false; 
         this.alertPanel.showError(response.error.message);
         let objectDuplicado =  [];
         this.dataSource.forEach(element => {
@@ -254,13 +268,24 @@ export class MovimientoComponent {
   }
 
   editar(obj, index){
-    this.form.patchValue({
-      'articulo_ingresar':          obj.id,
-      'trabajador_ingresar':        obj.persona_id,
-      'cantidad_ingresar':          obj.cantidad,
-    });
+    console.log(obj);
+    if(obj.tipo_movto == 1)
+    {
+      this.form.patchValue({
+        'articulo_ingresar':          obj.articulo,
+        'proveedor':                  obj.persona,
+        'cantidad_ingresar':          obj.cantidad,
+      });
+    }else{
+      this.form.patchValue({
+        'articulo_ingresar':          obj.articulo,
+        'trabajador_ingresar':        obj.persona,
+        'cantidad_ingresar':          obj.cantidad,
+      });
+    }
+    
     this.indexForm = index;
-    this.edicionForm = obj.id;
+    this.edicionForm = obj.articulo.id;
   }
 
   resizeDialog(){
@@ -274,7 +299,7 @@ export class MovimientoComponent {
   }
 
 
-  articuloSeleccionado(event: MatSelectChange)
+  /*articuloSeleccionado(event: MatSelectChange)
   {
     this.articulo = {
       id: event.value,
@@ -290,31 +315,29 @@ export class MovimientoComponent {
       descripcion: event.source.triggerValue
     };
     this.validaIngresos();
-  }
+  }*/
 
   agregarArticulo() {
+      let data = this.form.value;
       let cantidad =  parseInt(this.form.get('cantidad_ingresar').value);
 
-      let Articulos = { id: this.articulo.id, articulo: this.articulo.descripcion, cantidad: cantidad, persona_id:0, nombre_persona: '', error:0 };
+      //let Articulos = { id: this.articulo.id, articulo: this.articulo.descripcion, cantidad: cantidad, persona_id:0, nombre_persona: '', error:0 };
+      let Articulos = { articulo: data.articulo_ingresar, cantidad: data.cantidad_ingresar, persona:0, tipo_movto:data.tipo_movto, error:0 };
       
       if(this.tipo_Movto == 1)
       {
-        let proveedor = this.form.get('proveedor').value;
-        Articulos.nombre_persona  = proveedor;  
+        //let proveedor = this.form.get('proveedor').value;
+        Articulos.persona  = data.proveedor;  
         
       }else if(this.tipo_Movto == 2){
-        Articulos.persona_id= this.personal.id;
-        Articulos.nombre_persona  = this.personal.descripcion;
+        Articulos.persona = data.trabajador_ingresar;
+        //Articulos.nombre_persona  = this.personal.descripcion;
       }
       
       if(this.edicionForm)
       {
         let objectDuplicado = [];
-        console.log(this.indexForm);
-        console.log(this.dataSource);
-        console.log(Articulos);
         for (let index = 0; index < this.dataSource.length; index++) {
-          console.log(index);
           if(index == this.indexForm)
           {
             objectDuplicado.push(Articulos);
@@ -389,5 +412,11 @@ export class MovimientoComponent {
     this.dialogRef.close(this.savedData);
   }
 
+  getDisplayFn(label: string){
+    return (val) => this.displayFn(val,label);
+  }
 
+  displayFn(value: any, valueLabel: string){
+    return value ? value[valueLabel] : value;
+  }
 }

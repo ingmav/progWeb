@@ -4,7 +4,7 @@
             <div class="label-info" >
                 Nuevo Movimiento
             </div>
-            <button mat-button (click)="guardar()" [disabled]="!form.valid || dataSource.length == 0">
+            <button mat-button (click)="guardar()" [disabled]="isLoading && !form.valid || dataSource.length == 0 ">
                 <mat-icon>{{(changesDetected)?'save_as':'save'}}</mat-icon><span class="hide-xs">&nbsp;Guardar</span>
             </button>
             <div class="flex-fill"></div>
@@ -47,13 +47,13 @@
             <div class="flex-row flex-xs-column flex-fill flex-gap" *ngIf="movto.value == 1">
                 <mat-form-field appearance="fill" class="flex-fill">
                     <mat-label>EMPRESA O PROVEEDOR: </mat-label>
-                    <input type="text" matInput autocomplete="off" formControlName="proveedor" placeholder="Proveedor" (blur)="validaIngresos()">
+                    <input type="text" matInput autocomplete="off" formControlName="proveedor" placeholder="Proveedor" >
                     <mat-error *ngIf="form.get('proveedor').hasError('required')">Este campo es obligatorio</mat-error>
                 </mat-form-field>
             </div>
             
             <div class="flex-row flex-xs-column flex-fill flex-gap module-search-bar" *ngIf="tipo_Movto == 1 || tipo_Movto==2">
-                <mat-form-field appearance="fill" class="flex-fill">
+                <!--mat-form-field appearance="fill" class="flex-fill">
                     <mat-label>ARTICULO: </mat-label>
                     <mat-select formControlName='articulo_ingresar'  #articulo (selectionChange)="articuloSeleccionado($event)">
                         <mat-option *ngFor="let item of filterCatalogs['articulo']" [value]="item.id">
@@ -65,45 +65,84 @@
                             </div>
                         </mat-option>
                     </mat-select>
-                    <!--mat-hint *ngIf="articulo.value!=''">{{ }}</mat-hint>
-                    <mat-hint *ngIf="articulo.value!=''">hola</mat-hint>
-                    <mat-hint *ngIf="articulo.value!=''">hola</mat-hint-->
+                    
+                </mat-form-field-->
+                <mat-form-field appearance="fill" class="flex-fill">
+                    <mat-label>ARTÍCULOS</mat-label>
+                    <input type="text" aria-label="articulo_ingresar" matInput #article formControlName="articulo_ingresar" [matAutocomplete]="articuloAutocomplete">
+                    <mat-autocomplete #articuloAutocomplete="matAutocomplete" [displayWith]="getDisplayFn('descripcion')" [panelWidth]="'auto'">
+                        <mat-option *ngFor="let item of filteredCatalogs['articulo'] | async" [value]="item">
+                            {{ item.descripcion }}
+                            <div style="font-size: 9pt;">
+                                <label *ngIf="item.modelo!=''">MODELO: {{ item.modelo }} -</label>
+                                <label *ngIf="item.marca!=''">MARCA: {{ item.marca }} -</label>
+                                <label *ngIf="item.talla!=''">TALLA: {{ item.talla }} -</label>
+                            </div>
+                        </mat-option>
+                    </mat-autocomplete>
+                    <mat-hint *ngIf="form.get('articulo_ingresar').value">
+                        Talla: {{form.get('articulo_ingresar').value.talla}}
+                        Modelo: {{form.get('articulo_ingresar').value.modelo}}
+                        Marca: {{form.get('articulo_ingresar').value.marca}}
+                    </mat-hint>
                 </mat-form-field>
-                
                 <button mat-raised-button color="primary" style="padding: 30px;" (click)="insertaArticulo()">
                     <mat-icon>add_box</mat-icon>
                 </button>
-                <mat-form-field appearance="fill" class="flex-fill" *ngIf="movto.value == 2">
+                <!--mat-form-field appearance="fill" class="flex-fill" *ngIf="movto.value == 2">
                     <mat-label>TRABAJADOR: </mat-label>
                     <mat-select formControlName='trabajador_ingresar' #articulo (selectionChange)="personalSeleccionado($event)">
                         <mat-option *ngFor="let item of filterCatalogs['personal']" [value]="item.id">{{ item.descripcion }}</mat-option>
                     </mat-select>
+                </mat-form-field-->
+                <mat-form-field appearance="fill" class="flex-fill" *ngIf="movto.value == 2">
+                    <mat-label>TRABAJADOR</mat-label>
+                    <input type="text" aria-label="trabajador_ingresar" matInput formControlName="trabajador_ingresar" [matAutocomplete]="trabajadorAutocomplete">
+                    <mat-autocomplete #trabajadorAutocomplete="matAutocomplete" [displayWith]="getDisplayFn('descripcion')" [panelWidth]="'auto'">
+                        <mat-option *ngFor="let item of filteredCatalogs['personal'] | async" [value]="item">
+                            {{ item.descripcion }}
+                            <div style="font-size: 9pt;">
+                                <label *ngIf="item.modelo!=''">CARGO: {{ item.cargo }} -</label>
+                            </div>
+                        </mat-option>
+                    </mat-autocomplete>
+                    <mat-hint *ngIf="form.get('trabajador_ingresar').value">
+                        CARGO: {{form.get('trabajador_ingresar').value.cargo}}
+                    </mat-hint>
                 </mat-form-field>
                 <button mat-raised-button color="primary" style="padding: 30px;" (click)="insertaTrabajador()" *ngIf="movto.value == 2" >
                     <mat-icon>people</mat-icon>
                 </button>
                 <mat-form-field appearance="fill" class="flex-fill">
                     <mat-label>CANTIDAD: </mat-label>
-                    <input type="number"  formControlName='cantidad_ingresar' matInput autocomplete="off" placeholder="CANTIDAD" (blur)="validaIngresos()">
+                    <input type="number"  formControlName='cantidad_ingresar' matInput autocomplete="off" placeholder="CANTIDAD" #cantidad (blur)="validaIngresos()">
                 </mat-form-field>
                 <div>
                     
-                    <button mat-raised-button color="primary" style="padding: 30px;" (click)="agregarArticulo()" [disabled]="!validacionIngresos">
-                        <mat-icon>add</mat-icon>
+                    <button mat-raised-button color="accent" style="padding: 30px;" (click)="agregarArticulo()" [disabled]="!((movto.value == 1 && form.get('proveedor').value!='' && cantidad.value>0 && (form.get('articulo_ingresar').value == '[object Object]') || (movto.value == 2 && cantidad.value>0 && (form.get('articulo_ingresar').value == '[object Object]' && (form.get('trabajador_ingresar').value == '[object Object]')))))">
+                        <mat-icon>save</mat-icon>
                     </button>
                 </div>
 
             </div>
-            <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 demo-table">
+            <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 demo-table" style="margin-top: 20px;">
                 <!-- Position Column -->
                 <ng-container matColumnDef="articulo">
                     <th mat-header-cell *matHeaderCellDef>ARTÍCULO</th>
-                    <td mat-cell *matCellDef="let element">{{element.articulo}}</td>
+                    <td mat-cell *matCellDef="let element">{{element.articulo.descripcion}}</td>
                 </ng-container>
                 <!-- Position Column -->
                 <ng-container matColumnDef="persona">
                     <th mat-header-cell *matHeaderCellDef>PERSONA</th>
-                    <td mat-cell *matCellDef="let element">{{element.nombre_persona}}</td>
+                    <td mat-cell *matCellDef="let element">
+                        <div *ngIf="element.tipo_movto == 1">
+                            {{element.persona}}
+                        </div>
+                        <div *ngIf="element.tipo_movto == 2">
+                            {{element.persona.descripcion}}
+                        </div>
+                        
+                    </td>
                 </ng-container>
                 
                 <!-- Name Column -->
