@@ -19,17 +19,12 @@ class InventarioController extends Controller
             $loggedUser = auth()->userOrFail();
 
             $parametros = $request->all();
-            $obj = CatalogoArticulos::getModel();
+            $obj = CatalogoArticulos::with("unidad")->orderBy("catalogo_articulos.descripcion");
 
             
             //Filtros, busquedas, ordenamiento
-            if($parametros['query']){
+            if(isset($parametros['query']) && $parametros['query']){
                 $obj = $obj->where('descripcion','LIKE','%'.$parametros['query'].'%');
-                /*$obj = $obj->where(function($query)use($parametros){
-                    return $query->where('descripcion','LIKE','%'.$parametros['query'].'%')
-                                ->orWhere('username','LIKE','%'.$parametros['query'].'%')
-                                ->orWhere('email','LIKE','%'.$parametros['query'].'%');
-                });*/
             }
 
             if((isset($parametros['sort']) && $parametros['sort']) && (isset($parametros['direction']) && $parametros['direction'])){

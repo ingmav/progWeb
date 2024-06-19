@@ -9,6 +9,9 @@ import { MovimientoComponent } from '../movimiento/movimiento.component';
 import { CardexComponent } from '../cardex/cardex.component';
 import { VerImagenComponent } from '../../catalogos/articulos/ver-imagen/ver-imagen.component';
 
+import { ReportWorker } from '../../../../web-workers/report-worker';
+import * as FileSaver from 'file-saver';
+
 @Component({
   selector: 'app-lista',
   templateUrl: './lista.component.html',
@@ -157,5 +160,45 @@ export class ListaComponent {
       }
     });
 
+  }
+
+  printPdf()
+  {
+    this.isLoadingPDF = true;
+    return this.servicioService.obtenerLista(null).subscribe({
+      next:(response:any) => {
+        console.log(response);
+        const reportWorker = this.iniciateWorker('INVENTARIO-TRIGUEÑA-HIGIENE');
+        let config = {  title: "hola", lote:true, externo:true };
+        reportWorker.postMessage({data:{items: response.data},reporte:'inventario/general'});
+        this.isLoadingPDF = false;
+      },
+      error:(response:any) => {
+        this.isLoadingPDF = false;
+        this.alertPanel.showError(response.error.message);
+        this.isLoadingResults = false;
+      }
+    });
+  }
+
+  iniciateWorker(nombre:string)
+  {
+      const reportWorker = new ReportWorker();
+      reportWorker.onmessage().subscribe(
+        data => {
+          console.log("---");
+          console.log(data.data);
+          console.log("---**");
+          FileSaver.saveAs(data.data,nombre);
+          reportWorker.terminate();
+     });
+
+      reportWorker.onerror().subscribe(
+        (data) => {
+          this.isLoadingPDF = false;
+          reportWorker.terminate();
+        }
+      );
+      return reportWorker;
   }
 }

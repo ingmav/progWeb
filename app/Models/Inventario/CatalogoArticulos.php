@@ -21,4 +21,8 @@ class CatalogoArticulos extends Model
         'max',
         'user_id'
     ];
+
+    public function unidad(){
+        return $this->belongsto('App\Models\Inventario\CatalogoUnidad', "catalogo_unidad_id", "id");
+    }
 }

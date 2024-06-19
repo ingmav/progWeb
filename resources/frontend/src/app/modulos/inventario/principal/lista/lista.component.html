@@ -9,15 +9,16 @@
             <mat-icon>search</mat-icon>
         </button>
     </mat-form-field>
-    <!--button mat-icon-button  [disabled]="isLoadingPDF">
+    <button mat-icon-button  [disabled]="isLoadingPDF" (click)="printPdf()">
         <mat-icon svgIcon="pdf-icon"></mat-icon>
-    </button-->
+        <mat-progress-bar *ngIf="isLoadingPDF" mode="query"></mat-progress-bar>
+    </button>
     <button mat-raised-button color="primary" (click)="openDialogMovto()" [matTooltip]="'Nuevo Movimiento'"><mat-icon>add</mat-icon></button>
 </div>
 
 <div>
     <alert-panel></alert-panel>
-    <mat-progress-bar *ngIf="isLoadingPDF" mode="query"></mat-progress-bar>
+    <!-- <mat-progress-bar *ngIf="isLoadingPDF" mode="query"></mat-progress-bar> -->
 </div>
 
 <mat-card class="table-card flex-fill">
@@ -25,7 +26,7 @@
         <div class="main-list-table left-click-open flex-fill">
             <table mat-table [dataSource]="data" matSort matSortActive="updated_at" matSortDirection="desc">
                 <ng-container matColumnDef="descripcion">
-                    <th mat-header-cell *matHeaderCellDef>Descripcion</th>
+                    <th mat-header-cell *matHeaderCellDef>DESCRIPCIÓN</th>
                     <td mat-cell *matCellDef="let row">
                         {{ row.descripcion }}
                         
@@ -33,7 +34,7 @@
                 </ng-container>
 
                 <ng-container matColumnDef="datos">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="hide-xs  hide-sm">Datos</th>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="hide-xs  hide-sm">DATOS</th>
                     <td mat-cell *matCellDef="let row" class="hide-xs  hide-sm">
                         Marca: <label *ngIf="row.marca==''">-----</label><label *ngIf="row.marca!=''">{{row.marca}}</label>  
                         Modelo: <label *ngIf="row.modelo==''">-----</label><label *ngIf="row.modelo!=''">{{row.modelo}}</label>
@@ -44,7 +45,7 @@
                 </ng-container>
 
                 <ng-container matColumnDef="inventario">
-                    <th mat-header-cell *matHeaderCellDef class="hide-xs  hide-sm">Inventario</th>
+                    <th mat-header-cell *matHeaderCellDef class="hide-xs  hide-sm">INVENTARIO</th>
                     <td mat-cell *matCellDef="let row" class="hide-xs hide-sm">
                         <div matTooltip="min: {{ row.min}} - max: {{ row.max}}" [ngClass]="{'correcto': row.inventario>row.min, 'incorrecto':row.inventario==row.min}">
                             {{ row.inventario }}
@@ -64,7 +65,7 @@
                 </ng-container>
                 
                 <ng-container matColumnDef="ultimo_movimiento">
-                    <th width="1" style="white-space: nowrap;" mat-header-cell *matHeaderCellDef mat-sort-header>Ultimo Movimiento</th>
+                    <th width="1" style="white-space: nowrap;" mat-header-cell *matHeaderCellDef mat-sort-header>ÚLTIMO MOVIMIENTO</th>
                     <td mat-cell *matCellDef="let row" style="white-space: nowrap; text-align: center;">
                         <span *ngIf="!row.ultimo_movimiento">Nunca</span>
                         <span *ngIf="row.ultimo_movimiento">

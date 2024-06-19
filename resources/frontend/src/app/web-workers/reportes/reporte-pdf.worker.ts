@@ -2,12 +2,12 @@
 import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 
-import { ReporteUsuarios } from './reporte-usuarios';
+import { ReporteInventario } from './reporte-inventario';
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 const reportes = {
-  'control-acceso/usuarios' : new ReporteUsuarios(),
+  'inventario/general' : new ReporteInventario(),
 };
 
 addEventListener('message', ({ data }) => {
