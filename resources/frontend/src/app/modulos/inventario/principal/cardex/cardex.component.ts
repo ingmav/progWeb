@@ -43,7 +43,7 @@ export class CardexComponent {
   pageEvent: PageEvent;
   resultsLength: number = 0;
   currentPage: number = 0;
-  pageSize: number = 20;
+  pageSize: number = 7;
   constructor(
     public dialogRef: MatDialogRef<CardexComponent>,
     @Inject(MAT_DIALOG_DATA) public inData: DialogData,
@@ -128,7 +128,7 @@ export class CardexComponent {
     }
     return this.servicioService.obtenerCardex(this.inData.id,params).subscribe({
       next:(response:any) => {
-       console.log(response);
+       //console.log(response);
         this.data = response.cardex.data;
        this.resultsLength = response.cardex.total;
           
@@ -138,6 +138,7 @@ export class CardexComponent {
         this.alertPanel.showError(response.error.message);
       }
     });
+    return event;
   }
 
   resizeDialog(){

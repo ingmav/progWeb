@@ -134,7 +134,7 @@
                                 </table>
                             </div>
                             <div>
-                                <mat-paginator [length]="resultsLength" [pageSize]="pageSize" [pageSizeOptions]="[25, 50, 100]" showFirstLastButtons aria-label="Selecciona una página"></mat-paginator>
+                                <mat-paginator [length]="resultsLength" [pageSize]="pageSize" [pageSizeOptions]="[7]" showFirstLastButtons aria-label="Selecciona una página" (page)="pageEvent = cargarCardex($event)"></mat-paginator>
                             </div>
                         </div>
                     </mat-card>

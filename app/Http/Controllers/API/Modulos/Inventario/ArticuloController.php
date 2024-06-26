@@ -175,7 +175,7 @@ class ArticuloController extends Controller
                                     ->orderBy("fecha_movimiento", "desc");
 
             if(isset($parametros['page'])){
-                $resultadosPorPagina = isset($parametros["per_page"])? $parametros["per_page"] : 20;
+                $resultadosPorPagina = isset($parametros["per_page"])? $parametros["per_page"] : 10;
     
                 $cardex = $cardex->paginate($resultadosPorPagina);
             } else {
