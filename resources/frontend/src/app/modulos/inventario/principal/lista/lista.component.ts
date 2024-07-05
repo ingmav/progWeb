@@ -32,6 +32,7 @@ export class ListaComponent {
 
   isLoadingResults:boolean;
   isLoadingPDF:boolean;
+  isLoadingCardex:boolean;
 
   searchQuery:string;
 
@@ -167,7 +168,6 @@ export class ListaComponent {
     this.isLoadingPDF = true;
     return this.servicioService.obtenerLista(null).subscribe({
       next:(response:any) => {
-        console.log(response);
         const reportWorker = this.iniciateWorker('INVENTARIO-TRIGUEÑA-HIGIENE');
         let config = {  title: "hola", lote:true, externo:true };
         reportWorker.postMessage({data:{items: response.data},reporte:'inventario/general'});
@@ -181,16 +181,33 @@ export class ListaComponent {
     });
   }
 
+  imprimirCardex(obj)
+  {
+    this.isLoadingCardex = true;
+    return this.servicioService.obtenerCardex(obj.id,{}).subscribe({
+      next:(response:any) => {
+       //console.log(response);
+       const reportWorker = this.iniciateWorker('CARDEX');
+        let config = {  title: "hola", lote:true, externo:true };
+        reportWorker.postMessage({data: { items: response.cardex, articulo: response.articulo },reporte:'inventario/cardex'});
+        this.isLoadingCardex = false;  
+      },
+      error:(response:any) => {
+        this.isLoadingCardex = false; 
+        this.alertPanel.showError(response.error.message);
+      }
+    });
+  }
+
   iniciateWorker(nombre:string)
   {
       const reportWorker = new ReportWorker();
       reportWorker.onmessage().subscribe(
         data => {
-          console.log("---");
-          console.log(data.data);
-          console.log("---**");
+          
           FileSaver.saveAs(data.data,nombre);
           reportWorker.terminate();
+          this.isLoadingCardex = false;  
      });
 
       reportWorker.onerror().subscribe(

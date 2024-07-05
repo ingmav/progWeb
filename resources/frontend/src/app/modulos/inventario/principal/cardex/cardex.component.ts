@@ -9,6 +9,8 @@ import { ServicioService } from '../../servicio.service';
 import { AlertPanelComponent } from 'src/app/shared/components/alert-panel/alert-panel.component';
 import { MatPaginator } from '@angular/material/paginator';
 import { PageEvent } from '@angular/material/paginator';
+import { ReportWorker } from '../../../../web-workers/report-worker';
+import * as FileSaver from 'file-saver';
 
 export interface DialogData {
   id: number;
@@ -44,6 +46,8 @@ export class CardexComponent {
   resultsLength: number = 0;
   currentPage: number = 0;
   pageSize: number = 7;
+  loadingCardex:boolean = false;
+
   constructor(
     public dialogRef: MatDialogRef<CardexComponent>,
     @Inject(MAT_DIALOG_DATA) public inData: DialogData,
@@ -139,6 +143,45 @@ export class CardexComponent {
       }
     });
     return event;
+  }
+
+  imprimirCardex(obj)
+  {
+    this.loadingCardex = true;
+    return this.servicioService.obtenerCardex(this.inData.id,{}).subscribe({
+      next:(response:any) => {
+       //console.log(response);
+       const reportWorker = this.iniciateWorker('CARDEX');
+        let config = {  title: "hola", lote:true, externo:true };
+        reportWorker.postMessage({data: { items: response.cardex, articulo: response.articulo },reporte:'inventario/cardex'});
+        //this.isLoadingPDF = false;  
+      },
+      error:(response:any) => {
+        this.alertPanel.showError(response.error.message);
+        this.loadingCardex = false;
+      }
+    });
+  }
+
+  iniciateWorker(nombre:string)
+  {
+      const reportWorker = new ReportWorker();
+      reportWorker.onmessage().subscribe(
+        data => {
+          
+          FileSaver.saveAs(data.data,nombre);
+          reportWorker.terminate();
+          this.loadingCardex = false;
+     });
+
+      reportWorker.onerror().subscribe(
+        (data) => {
+          //this.isLoadingPDF = false;
+          reportWorker.terminate();
+          this.loadingCardex = false;
+        }
+      );
+      return reportWorker;
   }
 
   resizeDialog(){

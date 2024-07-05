@@ -3,11 +3,13 @@ import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 
 import { ReporteInventario } from './reporte-inventario';
+import { ReporteCardex } from './reporte-cardex';
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 const reportes = {
-  'inventario/general' : new ReporteInventario(),
+  'inventario/general'  : new ReporteInventario(),
+  'inventario/cardex'   : new ReporteCardex(),
 };
 
 addEventListener('message', ({ data }) => {

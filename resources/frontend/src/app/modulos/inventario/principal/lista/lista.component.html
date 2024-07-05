@@ -9,6 +9,10 @@
             <mat-icon>search</mat-icon>
         </button>
     </mat-form-field>
+    <button mat-button  [disabled]="true"  *ngIf="isLoadingCardex">
+        GENERANDO CARDEX
+        <mat-progress-bar  mode="query"></mat-progress-bar>
+    </button>
     <button mat-icon-button  [disabled]="isLoadingPDF" (click)="printPdf()">
         <mat-icon svgIcon="pdf-icon"></mat-icon>
         <mat-progress-bar *ngIf="isLoadingPDF" mode="query"></mat-progress-bar>
@@ -110,6 +114,7 @@
 <ng-template #rowMenu let-row="row" let-status="status">
     <div class="context-menu mat-elevation-z2" cdkMenu>
         <button class="context-menu-item" cdkMenuItem (click)="openDialogCardex(row)"><mat-icon>receipt</mat-icon>&nbsp;Cardex</button>
+        <button class="context-menu-item" cdkMenuItem (click)="imprimirCardex(row)"><mat-icon  svgIcon="pdf-icon"></mat-icon>&nbsp;Imprimir Cardex</button>
         
     </div>
 </ng-template>

@@ -3,7 +3,10 @@
         <div class="flex-row">
             <div class="label-info" >
                 CARDEX
-                
+                <button mat-button (click)="imprimirCardex(null)" [disabled]="loadingCardex">
+                    <mat-icon  svgIcon="pdf-icon"></mat-icon>&nbsp;<span class="hide-xs">&nbsp;Imprimir Cardex</span>
+                    <mat-progress-bar mode="indeterminate" *ngIf="loadingCardex"></mat-progress-bar>
+                </button>      
             </div>
            
             <div class="flex-fill"></div>
