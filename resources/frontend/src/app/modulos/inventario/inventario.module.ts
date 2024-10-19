@@ -8,6 +8,7 @@ import { ListaArticulosComponent } from './catalogos/articulos/lista-articulos/l
 import { ListaPersonalComponent } from './catalogos/personal/lista-personal/lista-personal.component';
 import { MovimientoComponent } from './principal/movimiento/movimiento.component';
 import { CardexComponent } from './principal/cardex/cardex.component';
+import { HistorialPersonalComponent } from './principal/historial-personal/historial-personal.component';
 
 
 
@@ -17,6 +18,7 @@ import { CardexComponent } from './principal/cardex/cardex.component';
     ListaArticulosComponent,
     ListaPersonalComponent,
     MovimientoComponent,
+    HistorialPersonalComponent,
     CardexComponent
   ],
   imports: [

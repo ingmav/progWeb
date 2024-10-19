@@ -3,12 +3,14 @@ import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 
 import { ReporteInventario } from './reporte-inventario';
+import { ReporteInventarioPersonal } from './reporte-inventario-personal';
 import { ReporteCardex } from './reporte-cardex';
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 const reportes = {
   'inventario/general'  : new ReporteInventario(),
+  'inventario/personal'  : new ReporteInventarioPersonal(),
   'inventario/cardex'   : new ReporteCardex(),
 };
 

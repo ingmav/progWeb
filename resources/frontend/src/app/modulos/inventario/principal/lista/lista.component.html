@@ -17,6 +17,7 @@
         <mat-icon svgIcon="pdf-icon"></mat-icon>
         <mat-progress-bar *ngIf="isLoadingPDF" mode="query"></mat-progress-bar>
     </button>
+    <button mat-raised-button color="warn" (click)="openDialogHistorial()" [matTooltip]="'Historial por Empleado'"><mat-icon>history</mat-icon></button>
     <button mat-raised-button color="primary" (click)="openDialogMovto()" [matTooltip]="'Nuevo Movimiento'"><mat-icon>add</mat-icon></button>
 </div>
 

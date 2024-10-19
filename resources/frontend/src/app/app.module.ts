@@ -38,6 +38,8 @@ import { InventarioModule } from './modulos/inventario/inventario.module';
 //Para el Lenguaje de las Fechas
 import { registerLocaleData } from '@angular/common';
 import locale from '@angular/common/locales/es-MX';
+
+
 registerLocaleData(locale);
 
 @NgModule({

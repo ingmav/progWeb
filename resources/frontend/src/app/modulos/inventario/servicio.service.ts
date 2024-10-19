@@ -12,6 +12,7 @@ export class ServicioService {
   url_catalogos            = `${environment.base_url}/catalogos`;
   url_cardex               = `${environment.base_url}/cardex`;
   url_ver_imagen           = `${environment.base_url}/ver-imagen`;
+  url_historial_trabajador = `${environment.base_url}/ver-historial-trabajador`;
   
   constructor(private http: HttpClient) { }
   
@@ -24,6 +25,14 @@ export class ServicioService {
   }
   obtenerCatalogos(payload):Observable<any> {
     return this.http.get<any>(this.url_catalogos, {params:payload}).pipe(
+      map( response => {
+        return response;
+      })
+    );
+  }
+  
+  obtenerHistorial(payload):Observable<any> {
+    return this.http.get<any>(this.url_historial_trabajador, {params:payload}).pipe(
       map( response => {
         return response;
       })

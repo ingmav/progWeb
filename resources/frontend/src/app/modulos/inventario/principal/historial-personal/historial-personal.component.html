@@ -1,0 +1,97 @@
+<section class="flex-column" style="height: 100%; overflow: hidden; flex: 1 1 0%;" (document:keydown.escape)="cancelarAccion()" > <!-- Main Body <<<<<<< -->
+    <section class="dialog-toolbar"> <!-- Toolbar Menu <<<<<<< -->
+        <div class="flex-row">
+            <div class="label-info" >
+                Historial de Movimiento
+            </div>
+            <div class="flex-fill"></div>
+            <div class="label-info screen-size-icon" *ngIf="currentScreenSize == 'xs' || currentScreenSize == 'sm'">
+                <mat-icon>phone_iphone</mat-icon>
+            </div>
+            <button mat-button class="boton-accion" (click)="resizeDialog()" [matTooltip]="(dialogMaxSize)?'Restaurar':'Maximizar'" [matTooltipPosition]="'left'" tabindex="-1" *ngIf="currentScreenSize != 'xs' && currentScreenSize != 'sm'">
+                <mat-icon>{{(dialogMaxSize)?'fit_screen':'fullscreen'}}</mat-icon>
+            </button>
+            <button class="boton-accion boton-cerrar" mat-button (click)="cerrar()" tabindex="-1"><mat-icon>close</mat-icon></button>
+        </div>
+    </section> <!-- <<<<<<< Toolbar Menu -->
+    <mat-progress-bar *ngIf="isLoading || isSaving" [mode]="(isSaving )?'indeterminate':'query'" [color]="(isSaving)?'accent':'primary'"></mat-progress-bar>
+    <section>
+        <alert-panel></alert-panel>
+    </section>
+    <div class="flex-row flex-gap module-search-bar"  [formGroup]="form">
+        <mat-form-field appearance="fill" class="flex-fill">
+            <mat-label>TRABAJADOR</mat-label>
+            <input type="text" matInput formControlName="trabajador_ingresar" [matAutocomplete]="trabajadorAutocomplete">
+            <mat-autocomplete #trabajadorAutocomplete="matAutocomplete" [displayWith]="getDisplayFn('descripcion')" [panelWidth]="'auto'">
+                <mat-option *ngFor="let item of filteredCatalogs['personal'] | async" [value]="item">
+                    {{ item.descripcion }}
+                    <div style="font-size: 9pt;">
+                        <label *ngIf="item.modelo!=''">CARGO: {{ item.cargo }} -</label>
+                    </div>
+                </mat-option>
+            </mat-autocomplete>
+            <mat-hint *ngIf="form.get('trabajador_ingresar').value">
+                CARGO: {{form.get('trabajador_ingresar').value.cargo}}
+            </mat-hint>
+        </mat-form-field>
+
+        <button mat-icon-button [disabled]="isLoadingPDF" (click)="printPdf()" [disabled]="!form.get('trabajador_ingresar').value">
+            <mat-icon svgIcon="pdf-icon"></mat-icon>
+            <mat-progress-bar mode="query" *ngIf="isLoadingPDF"></mat-progress-bar>
+        </button>
+        <button mat-raised-button color="primary" style="padding: 30px;" [disabled]="!form.get('trabajador_ingresar').value" (click)="verHistorial()">
+            <mat-icon>search</mat-icon> BUSCAR HISTORIAL
+        </button>
+    </div>
+    <mat-card class="flex-row flex-gap xs-max-height-user-form module-search-bar" style="padding: 8px;">
+
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 demo-table" style="margin-top: 20px;">
+            <!-- Position Column -->
+            <ng-container matColumnDef="fecha">
+                <th mat-header-cell *matHeaderCellDef>FECHA</th>
+                <td mat-cell *matCellDef="let element">
+                    {{ element.fecha_movimiento}}
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="articulo">
+                <th mat-header-cell *matHeaderCellDef>ARTÍCULO</th>
+                <td mat-cell *matCellDef="let element">{{element.descripcion}}</td>
+            </ng-container>
+            <!-- Position Column -->
+            <ng-container matColumnDef="tipo_movto">
+                <th mat-header-cell *matHeaderCellDef>TIPO MOVIMIENTO</th>
+                <td mat-cell *matCellDef="let element">
+                    {{ element.tipo_movimiento}}
+                </td>
+            </ng-container>
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="cantidad">
+                <th mat-header-cell *matHeaderCellDef>CANTIDAD</th>
+                <td mat-cell *matCellDef="let element">{{element.cantidad}} ({{ element.abreviatura}})</td>
+            </ng-container>
+            <!-- Name Column -->
+            <ng-container matColumnDef="loadingResults">
+                <td mat-footer-cell *matFooterCellDef [attr.colspan]="displayedColumns.length" class="no-results-found">
+                    --| Cargando Registros |--
+                    <mat-progress-bar mode="query"></mat-progress-bar>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="noResultsFound">
+                <td mat-footer-cell *matFooterCellDef [attr.colspan]="displayedColumns.length" class="no-results-found" >
+                    No se encontraron registros
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"  [class]="(row.error ==  1)?'rojo':''" ></tr>
+            <tr mat-footer-row *matFooterRowDef="['loadingResults']" [ngClass]="{'hide':!isLoadingResults}"></tr>
+            <tr mat-footer-row *matFooterRowDef="['noResultsFound']" [ngClass]="{'hide':!(dataSource!=null && dataSource.length==0 && !isLoadingResults)}"></tr>
+            </table>
+            <div>
+                <mat-paginator [length]="resultsLength" [pageSize]="pageSize" [pageSizeOptions]="[7]" showFirstLastButtons aria-label="Selecciona una página" (page)="pageEvent = verHistorial($event)"></mat-paginator>
+            </div>
+    </mat-card>
+
+</section>

@@ -11,6 +11,7 @@ import { VerImagenComponent } from '../../catalogos/articulos/ver-imagen/ver-ima
 
 import { ReportWorker } from '../../../../web-workers/report-worker';
 import * as FileSaver from 'file-saver';
+import { HistorialPersonalComponent } from '../historial-personal/historial-personal.component';
 
 @Component({
   selector: 'app-lista',
@@ -127,6 +128,28 @@ export class ListaComponent {
     }
 
     const dialogRef = this.dialog.open(MovimientoComponent,dialogConfig);
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(result){
+        this.applySearch();
+      }
+    });
+
+  }
+  openDialogHistorial(id?){
+    let dialogConfig:any = {
+      maxWidth: '100%',
+      width: '100%',
+      height: '1000%',
+      disableClose: true,
+      data:{}
+    };
+
+    if(id){
+      dialogConfig.data.id = id;
+    }
+
+    const dialogRef = this.dialog.open(HistorialPersonalComponent,dialogConfig);
 
     dialogRef.afterClosed().subscribe(result => {
       if(result){

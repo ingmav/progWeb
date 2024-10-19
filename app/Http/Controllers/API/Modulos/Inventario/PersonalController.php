@@ -48,6 +48,37 @@ class PersonalController extends Controller
         }
     }
 
+    public function VerHistorial(Request $request){
+        try{
+            $parametros = $request->all();
+            $obj = CatalogoPersonal::Join("movtos_detalles", "movtos_detalles.catalogo_personal_id", "catalogo_personal.id")
+                                        ->Join("movtos", "movtos.id", "movtos_detalles.movtos_id")
+                                        ->Join("catalogo_articulos", "catalogo_articulos.id", "movtos_detalles.articulo_id")
+                                        ->Join("catalogo_unidad", "catalogo_unidad.id", "catalogo_articulos.catalogo_unidad_id")
+                                        ->orderBy("movtos.fecha_movimiento", "desc")
+                                        ->select(
+                                            "catalogo_personal.id",
+                                            "movtos.fecha_movimiento", 
+                                                "catalogo_articulos.descripcion", 
+                                                DB::RAW("IF(movtos.tipo_movto=1,'ENTRADA','SALIDA') AS tipo_movimiento"),
+                                                "movtos_detalles.cantidad",
+                                                "catalogo_unidad.abreviatura")
+                                        ->where("catalogo_personal.id", $parametros['trabajador_id']);
+
+            if(isset($parametros['page'])){
+                $resultadosPorPagina = isset($parametros["per_page"])? $parametros["per_page"] : 7;
+    
+                $obj = $obj->paginate($resultadosPorPagina);
+            } else {
+                $obj = $obj->get();
+            }
+
+            return response()->json(['data'=>$obj],HttpResponse::HTTP_OK);
+        }catch(\Exception $e){
+            throw new \App\Exceptions\LogError('Ocurrio un error al intentar obtener la lista de usuarios',0,$e);
+        }
+    }
+
     public function show($id, Request $request){
         try{
             $loggedUser = auth()->userOrFail();
