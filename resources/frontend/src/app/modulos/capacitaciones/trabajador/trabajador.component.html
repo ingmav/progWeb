@@ -1,0 +1,19 @@
+<section class="flex-column" style="height: 100%; overflow: hidden; flex: 1 1 0%;" (document:keydown.escape)="cancelarAccion()"> <!-- Main Body <<<<<<< -->
+    <section class="dialog-toolbar"> <!-- Toolbar Menu <<<<<<< -->
+        <div class="flex-row">
+            <div class="label-info" >
+                Catálogo de Puestos
+            </div>
+            <div class="flex-fill"></div>
+            <div class="label-info screen-size-icon" *ngIf="currentScreenSize == 'xs' || currentScreenSize == 'sm'">
+                <mat-icon>phone_iphone</mat-icon>
+            </div>
+            <button mat-button class="boton-accion" (click)="resizeDialog()" [matTooltip]="(dialogMaxSize)?'Restaurar':'Maximizar'" [matTooltipPosition]="'left'" tabindex="-1" *ngIf="currentScreenSize != 'xs' && currentScreenSize != 'sm'">
+                <mat-icon>{{(dialogMaxSize)?'fit_screen':'fullscreen'}}</mat-icon>
+            </button>
+            <button class="boton-accion boton-cerrar" mat-button (click)="cerrar()" tabindex="-1"><mat-icon>close</mat-icon></button>
+        </div>
+    </section> <!-- <<<<<<< Toolbar Menu -->
+    <app-lista-personal  class="flex-column" style="height: 100%; overflow: hidden; flex: 1 1 0%;"></app-lista-personal>  
+    
+</section>  

@@ -53,7 +53,7 @@ export const APPS:App [] = [
             }
         ] 
     },
-    { name:'Inventario Higiene', route: "inventario-higiene",  icon: "assets/icons/higiene.png", 
+    { name:'Inventario Higiene', route: "inventario-higiene",  icon: "assets/icons/inventario.png", 
         menu:[
             {
                 name:'Inventario',
@@ -73,4 +73,18 @@ export const APPS:App [] = [
             }
         ] 
     },
+    {
+        name: 'Capacitaciones', route: 'capacitaciones', icon: "assets/icons/capacitacion.png"
+    }
+    // { name:'Actividades', route: "actividades",  icon: "assets/icons/higiene.png", 
+    //     menu:[
+    //         {
+    //             name:'Actividades',
+    //             icon: 'menu_open',
+    //             identificador:'actividades',
+    //             children:[
+    //                 { name:"Listado",      route: "actividades/listado",          icon: "inbox" },
+    //         ]}
+    //     ] 
+    // },
 ]

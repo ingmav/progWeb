@@ -34,10 +34,13 @@ import { SessionUserMenuComponent } from './navigation/session-user-menu/session
 import { DevToolsModule } from './dev-tools/dev-tools.module';
 import { ControlAccesoModule } from './modulos/control-acceso/control-acceso.module';
 import { InventarioModule } from './modulos/inventario/inventario.module';
+import { ActividadesModule } from './modulos/actividades/actividades.module';
+
 
 //Para el Lenguaje de las Fechas
 import { registerLocaleData } from '@angular/common';
 import locale from '@angular/common/locales/es-MX';
+import { CapacitacionesModule } from './modulos/capacitaciones/capacitaciones.module';
 
 
 registerLocaleData(locale);
@@ -63,6 +66,8 @@ registerLocaleData(locale);
     AppRoutingModule,
     ControlAccesoModule,
     InventarioModule,
+    ActividadesModule,
+    CapacitacionesModule,
     WildcardRoutingModule,
   ],
   providers: [

@@ -8,15 +8,16 @@ import { AlertPanelComponent } from 'src/app/shared/components/alert-panel/alert
 //Para checar tamaño de la pantalla
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {map, startWith, takeUntil} from 'rxjs/operators';
 import { CustomValidator } from 'src/app/utils/classes/custom-validator';
 import { DialogConfirmActionComponent } from 'src/app/shared/components/dialog-confirm-action/dialog-confirm-action.component';
 import { ServicioPersonalService } from '../servicio-personal.service'
+import { CatalogosService } from 'src/app/modulos/capacitaciones/catalogos.service';
 
 export interface DialogData {
   id: number;
   descripcion: string;
-  cargo: string;
+  cargo: any;
 }
 
 @Component({
@@ -36,6 +37,7 @@ export class FormPersonalComponent {
     private servicioPersonalService: ServicioPersonalService,
     private breakpointObserver: BreakpointObserver,
     public dialog: MatDialog,
+    private catalogosService:CatalogosService
   ) {
     breakpointObserver
       .observe([
@@ -73,7 +75,8 @@ export class FormPersonalComponent {
   isRoot:boolean;
 
   savedData:boolean;
-
+  filteredCatalogs:any = [];
+  filterCatalogs:any = {};
   form:FormGroup;
   configPass:boolean;
   hidePassword:boolean;
@@ -101,12 +104,49 @@ export class FormPersonalComponent {
       'cargo':                      ['',[Validators.required]],
       
     });
+    this.cargarCatalogo();
+    
+  }
 
-    if(this.inData.id !=0)
-    {
-      let datos = this.inData;
-      this.form.patchValue({id: datos.id, descripcion: datos.descripcion, cargo:datos.cargo});
+  cargarCatalogo(){
+
+    return this.catalogosService.Listar('puesto',{}).subscribe({
+      next:(response:any) => {
+        console.log(response);
+        this.filterCatalogs.cargo = response.data;
+        //this.filteredCatalogs['cargo'] = response.data;
+        this.filteredCatalogs['cargo'] = this.form.controls['cargo'].valueChanges.pipe(startWith(''),map(value => this._filter(value,'cargo','descripcion')));
+
+        if(this.inData.id !=0)
+        {
+          let datos = this.inData;
+          let cargo = [];
+          if(datos.cargo)
+          {
+            cargo = datos.cargo.puesto;
+            this.form.patchValue({id: datos.id, descripcion: datos.descripcion, cargo:cargo});
+          }else{
+            this.form.patchValue({id: datos.id, descripcion: datos.descripcion});
+          }
+          
+        }
+      },
+      error:(response:any) => {
+       
+      }
+    });
+  }
+
+  private _filter(value: any, catalog: string, valueField: string): string[] {
+    let filterValue = '';
+    if(value){
+      if(typeof(value) == 'object'){
+        filterValue = value[valueField].toLowerCase();
+      }else{
+        filterValue = value.toLowerCase();
+      }
     }
+    return this.filterCatalogs[catalog].filter(option => option[valueField].toLowerCase().includes(filterValue));
   }
 
   guardar(){
@@ -154,6 +194,14 @@ export class FormPersonalComponent {
       this.dialogRef.updateSize('80%','60%');
       this.dialogMaxSize = false;
     }
+  }
+
+  getDisplayFn(label: string){
+    return (val) => this.displayFn(val,label);
+  }
+
+  displayFn(value: any, valueLabel: string){
+    return value ? value[valueLabel] : value;
   }
 
   cancelarAccion(){

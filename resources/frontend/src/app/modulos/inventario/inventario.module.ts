@@ -16,7 +16,6 @@ import { HistorialPersonalComponent } from './principal/historial-personal/histo
   declarations: [
     ListaComponent,
     ListaArticulosComponent,
-    ListaPersonalComponent,
     MovimientoComponent,
     HistorialPersonalComponent,
     CardexComponent

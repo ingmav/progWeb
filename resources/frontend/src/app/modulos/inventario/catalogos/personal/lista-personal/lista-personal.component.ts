@@ -7,9 +7,12 @@ import { AuthService } from 'src/app/auth/auth.service';
 import { ServicioPersonalService } from '../servicio-personal.service';
 import { FormPersonalComponent } from '../form-personal/form-personal.component';
 import { DialogConfirmActionComponent } from 'src/app/shared/components/dialog-confirm-action/dialog-confirm-action.component';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 @Component({
   selector: 'app-lista-personal',
+  standalone: true,
+  imports: [SharedModule],
   templateUrl: './lista-personal.component.html',
   styleUrl: './lista-personal.component.css'
 })
@@ -30,7 +33,7 @@ export class ListaPersonalComponent {
   searchQuery:string;
 
   pageSize:number = 50;
-  displayedColumns: string[] = ['nombre','registro'];
+  displayedColumns: string[] = ['nombre', 'cargo','registro'];
   resultsLength = 0;
   data:any;
 

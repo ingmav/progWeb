@@ -114,7 +114,7 @@ class CreateTableInventario extends Migration
     {
         //Schema::dropIfExists('descripcion_articulo');
         Schema::dropIfExists('movtos_detalles');
-        //Schema::dropIfExists('catalogo_articulos');
+        Schema::dropIfExists('catalogo_articulos');
         Schema::dropIfExists('movtos');
         Schema::dropIfExists('catalogo_unidad');
         Schema::dropIfExists('catalogo_calidad');

@@ -1,0 +1,68 @@
+<section class="flex-column" style="height: 100%; overflow: hidden; flex: 1 1 0%;" (document:keydown.escape)="cancelarAccion()"> <!-- Main Body <<<<<<< -->
+    <section class="dialog-toolbar"> <!-- Toolbar Menu <<<<<<< -->
+        <div class="flex-row">
+            <div class="label-info" >
+                RELACIÓN DE CAPACITACIONES DEL PUESTO {{ puesto | uppercase }}
+            </div>
+            <button mat-button (click)="guardar()" [disabled]="isLoading || seleccionados.length == 0">
+                <mat-icon>{{(changesDetected)?'save_as':'save'}}</mat-icon><span class="hide-xs">&nbsp;Guardar</span>
+            </button>
+            <div class="flex-fill"></div>
+            <div class="label-info screen-size-icon" *ngIf="currentScreenSize == 'xs' || currentScreenSize == 'sm'">
+                <mat-icon>phone_iphone</mat-icon>
+            </div>
+            <button mat-button class="boton-accion" (click)="resizeDialog()" [matTooltip]="(dialogMaxSize)?'Restaurar':'Maximizar'" [matTooltipPosition]="'left'" tabindex="-1" *ngIf="currentScreenSize != 'xs' && currentScreenSize != 'sm'">
+                <mat-icon>{{(dialogMaxSize)?'fit_screen':'fullscreen'}}</mat-icon>
+            </button>
+            <button class="boton-accion boton-cerrar" mat-button (click)="cerrar()" tabindex="-1"><mat-icon>close</mat-icon></button>
+        </div>
+    </section> <!-- <<<<<<< Toolbar Menu -->
+
+    <section>
+        <mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
+        <alert-panel></alert-panel>
+    </section>
+    <div class="principal">
+        <div class="listado">
+            <div class="formato">
+                <div class="title">CAPACITACIONES RELACIONADAS</div>
+                <div class="seleccionados">
+                    <ul>
+                        @for (item of seleccionados; track item) {
+                          <li>
+                            <mat-checkbox (click)="seleccionarNoCapacitacion(item)">
+                              {{item.descripcion}}
+                            </mat-checkbox>
+                          </li>
+                        }
+                      </ul>
+                </div>
+            </div>
+        </div>
+        <div class="botones">
+            <div class="botones-centrales">
+                <button mat-mini-fab color="primary" [disabled]="borrador_no_seleccionado.length == 0">
+                    <i class="uil uil-angle-left" style="font-size: 16pt;" (click)="der()"></i>
+                </button>
+                <button mat-mini-fab color="primary" (click)="izq()" [disabled]="borrador_seleccionado.length == 0">
+                    <i class="uil uil-angle-right" style="font-size: 16pt;"></i>
+                </button>
+            </div>
+            
+        </div>
+        <div class="listado">
+            <div class="title">TODAS LAS CAPACITACIONES</div>
+            <div class="seleccionados">
+                <ul>
+                    @for (item of no_seleccionados; track item) {
+                        <li>
+                        <mat-checkbox  (click)="seleccionarCapacitacion(item)" > 
+                            {{item.descripcion}}
+                        </mat-checkbox>
+                        </li>
+                    }
+                    </ul>
+            </div>
+        </div>
+    </div>
+</section>    

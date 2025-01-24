@@ -1,0 +1,72 @@
+<section class="flex-column" style="height: 100%; overflow: hidden; flex: 1 1 0%;" (document:keydown.escape)="cancelarAccion()"> <!-- Main Body <<<<<<< -->
+    <section class="dialog-toolbar"> <!-- Toolbar Menu <<<<<<< -->
+        <div class="flex-row">
+            <div class="label-info" >
+                {{ empleado }}
+            </div>
+            <div class="flex-fill"></div>
+            <div class="label-info screen-size-icon" *ngIf="currentScreenSize == 'xs' || currentScreenSize == 'sm'">
+                <mat-icon>phone_iphone</mat-icon>
+            </div>
+            <button mat-button class="boton-accion" (click)="resizeDialog()" [matTooltip]="(dialogMaxSize)?'Restaurar':'Maximizar'" [matTooltipPosition]="'left'" tabindex="-1" *ngIf="currentScreenSize != 'xs' && currentScreenSize != 'sm'">
+                <mat-icon>{{(dialogMaxSize)?'fit_screen':'fullscreen'}}</mat-icon>
+            </button>
+            <button class="boton-accion boton-cerrar" mat-button (click)="cerrar()" tabindex="-1"><mat-icon>close</mat-icon></button>
+        </div>
+    </section> <!-- <<<<<<< Toolbar Menu -->
+    
+    <!-- <mat-progress-bar *ngIf="isLoading || isSaving" [mode]="(isSaving)?'indeterminate':'query'" [color]="(isSaving)?'accent':'primary'"></mat-progress-bar> -->
+    <section>
+        <alert-panel></alert-panel>
+    </section>
+    <mat-card class="table-card flex-fill" style="margin-top: 5px;">
+        <div class="flex-column" style="height: 100%;">
+            <div class="main-list-table left-click-open flex-fill">
+                <table mat-table [dataSource]="data" matSort matSortActive="updated_at" matSortDirection="desc">
+                    <ng-container matColumnDef="capacitacion">
+                        <th mat-header-cell *matHeaderCellDef class="hide-xs  hide-sm">CAPACITACIÓN</th>
+                        <td mat-cell *matCellDef="let row" class="hide-xs hide-sm">
+                               
+                            {{ row.capacitacion }}<br>
+                            <div *ngIf="row.fecha!='----/--/--'">{{ row.fecha | date:'y-MM-dd' }}</div>
+                            
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="estatus">
+                        <th mat-header-cell *matHeaderCellDef class="hide-xs  hide-sm">ESTATUS</th>
+                        <td mat-cell *matCellDef="let row" class="hide-xs hide-sm">
+                            <button mat-mini-fab color="primary" *ngIf="row.estatus == 1">
+                                <mat-icon>check</mat-icon>
+                                </button>
+                            <button mat-mini-fab color="warn" *ngIf="row.estatus == 0">
+                                <mat-icon>cancel</mat-icon>
+                                </button>
+                        </td>
+                    </ng-container>
+    
+                   
+                    <ng-container matColumnDef="loadingResults">
+                        <td mat-footer-cell *matFooterCellDef [attr.colspan]="displayedColumns.length" class="no-results-found">
+                            --| Cargando Registros |--
+                            <mat-progress-bar mode="query"></mat-progress-bar>
+                        </td>
+                    </ng-container>
+    
+                    <ng-container matColumnDef="noResultsFound">
+                        <td mat-footer-cell *matFooterCellDef [attr.colspan]="displayedColumns.length" class="no-results-found" >
+                            No se encontraron registros 
+                        </td>
+                    </ng-container>
+    
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns; let i = index"></tr>
+                    <tr mat-footer-row *matFooterRowDef="['loadingResults']" [ngClass]="{'hide':!isLoadingResults}"></tr>
+                    <tr mat-footer-row *matFooterRowDef="['noResultsFound']" [ngClass]="{'hide':!(data!=null && data.length==0 && !isLoadingResults)}"></tr>
+                </table>
+            </div>
+            <!-- <div>
+                <mat-paginator [length]="resultsLength" [pageSize]="pageSize" [pageSizeOptions]="[25, 50, 100]" showFirstLastButtons aria-label="Selecciona una página"></mat-paginator>
+            </div> -->
+        </div>
+    </mat-card>
+</section>    

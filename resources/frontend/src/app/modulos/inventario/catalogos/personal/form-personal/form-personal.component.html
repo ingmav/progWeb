@@ -31,13 +31,23 @@
                         <input type="text" matInput autocomplete="off" formControlName="descripcion" placeholder="Nombre Completo" #nombre (input)="nombre.value=$event.target.value.toUpperCase()" required cdkFocusInitial>
                         <mat-error *ngIf="form.get('descripcion').hasError('required')">Este campo es obligatorio</mat-error>
                     </mat-form-field>
-
                     <mat-form-field appearance="fill" class="flex-fill">
-                        <mat-label>CARGO: </mat-label>
-                        <input type="text" matInput autocomplete="off" id="cargo" formControlName="cargo" placeholder="Cargo"  #cargo (input)="cargo.value=$event.target.value.toUpperCase()" required>
-                        <mat-error *ngIf="form.get('cargo').hasError('required')">El Correo Electrónico es obligatorio</mat-error>
+                        <mat-label>CARGO / PUESTO</mat-label>
+                        <input type="text" matInput formControlName="cargo" [matAutocomplete]="cargoAutocomplete">
+                        <mat-autocomplete #cargoAutocomplete="matAutocomplete" [displayWith]="getDisplayFn('descripcion')" [panelWidth]="'auto'">
+                            <mat-option *ngFor="let item of filteredCatalogs['cargo'] | async" [value]="item">
+                                {{ item.descripcion }}
+                                <div style="font-size: 9pt;">
+                                    <label *ngIf="item.capacitaciones''">CAPACITACIONES: {{ item.capacitaciones.length }} </label>
+                                </div>
+                            </mat-option>
+                        </mat-autocomplete>
+                            <mat-hint *ngIf="form.get('cargo').value">
+                                CAPACITACIONES: {{form.get('cargo').value.capacitaciones.length }}
+                            </mat-hint>
                         
                     </mat-form-field>
+                    
                 </div>
                 
             </mat-card>

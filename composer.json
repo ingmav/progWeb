@@ -11,6 +11,7 @@
         "php": "^7.3|^8.0",
         "doctrine/dbal": "^3.5",
         "facade/ignition": "^2.5",
+        "fakerphp/faker": "^1.24",
         "fideloper/proxy": "^4.0",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^8.0",

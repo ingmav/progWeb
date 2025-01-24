@@ -5,7 +5,7 @@ namespace App\Http\Controllers\API\Modulos\Inventario;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response as HttpResponse;
 use App\Http\Controllers\Controller;
-
+use App\Models\Capacitacion\RelTrabajadorPuesto;
 use Validator, DB;
 
 use App\Models\Inventario\CatalogoPersonal;
@@ -17,7 +17,7 @@ class PersonalController extends Controller
             $loggedUser = auth()->userOrFail();
 
             $parametros = $request->all();
-            $obj = CatalogoPersonal::getModel();
+            $obj = CatalogoPersonal::with("cargo.puesto.capacitaciones");
 
             
             //Filtros, busquedas, ordenamiento
@@ -111,7 +111,7 @@ class PersonalController extends Controller
             if($resultado->passes()){
                 DB::beginTransaction();
                 $usuario = auth()->userOrFail();
-                if(isset($parametros['id']) && $parametros['id']!=0)
+                if(isset($parametros['id']) && $parametros['id']!=0 && $parametros['id']!="")
                 {
                     $obj = CatalogoPersonal::find($parametros['id']);
                 }else
@@ -119,8 +119,24 @@ class PersonalController extends Controller
                     $obj = new CatalogoPersonal();
                 }
                 $obj->descripcion = strtoupper($parametros['descripcion']);
-                $obj->cargo = strtoupper($parametros['cargo']);
                 $obj->user_id = $usuario->id;
+                $obj->save();
+                //Buscamos su cargo
+                $obj_buscar = RelTrabajadorPuesto::where("catalogo_puesto_id", $parametros['cargo']['id'])
+                ->where("catalogo_personal_id", $obj->id)
+                ->count();
+                
+                if($obj_buscar == 0)
+                {
+                    RelTrabajadorPuesto::where("catalogo_personal_id", $obj->id)->delete();
+                    $obj_new = new RelTrabajadorPuesto();
+                    $obj_new->catalogo_personal_id = $obj->id;
+                    $obj_new->catalogo_puesto_id = $parametros['cargo']['id'];
+                    $obj_new->save();
+                }
+
+                //$obj->cargo = strtoupper($parametros['cargo']);
+                
                 $obj->save();
                 DB::commit();
                 return response()->json(['data'=>$obj],HttpResponse::HTTP_OK);
@@ -142,6 +158,38 @@ class PersonalController extends Controller
             return response()->json(['data'=>'Registro eliminado'], HttpResponse::HTTP_OK);
         }catch(\Exception $e){
             throw new \App\Exceptions\LogError('Ocurrio un error al intentar eliminar el rol',0,$e);
+        }
+    }
+
+    public function RelTrabajadorCapacitacion(Request $request)
+    {
+        try{
+            $loggedUser = auth()->userOrFail();
+
+            $parametros = $request->all();
+            $obj = CatalogoPersonal::with(["cargo.puesto.capacitaciones", "capacitaciones" => function ($query) {
+                return $query->whereRaw('catalogo_capacitacion_id in 
+                (select catalogo_capacitacion_id from rel_puesto_capacitacion where catalogo_puesto_id = 
+                (select catalogo_puesto_id from rel_trabajador_puesto where deleted_at is null and catalogo_personal_id=rel_trabajador_capacitacion.catalogo_personal_id))');
+            }]);
+            if($parametros['query']){
+                $obj = $obj->where(function($query)use($parametros){
+                    return $query->where('descripcion','LIKE','%'.$parametros['query'].'%')
+                                ->orWhere('cargo','LIKE','%'.$parametros['query'].'%');
+                });
+            }
+
+            
+            if(isset($parametros['page'])){
+                $resultadosPorPagina = isset($parametros["per_page"])? $parametros["per_page"] : 20;
+    
+                $obj = $obj->paginate($resultadosPorPagina);
+            } else {
+                $obj = $obj->get();
+            }
+            return response()->json(['data'=>$obj],HttpResponse::HTTP_OK);
+        }catch(\Exception $e){
+            throw new \App\Exceptions\LogError('Ocurrio un error al intentar obtener la lista de trabajadores',0,$e);
         }
     }
 }

@@ -53,20 +53,6 @@
             </div>
             
             <div class="flex-row flex-xs-column flex-fill flex-gap module-search-bar" *ngIf="tipo_Movto == 1 || tipo_Movto==2">
-                <!--mat-form-field appearance="fill" class="flex-fill">
-                    <mat-label>ARTICULO: </mat-label>
-                    <mat-select formControlName='articulo_ingresar'  #articulo (selectionChange)="articuloSeleccionado($event)">
-                        <mat-option *ngFor="let item of filterCatalogs['articulo']" [value]="item.id">
-                            {{ item.descripcion }}
-                            <div style="font-size: 9pt;">
-                                <label *ngIf="item.modelo!=''">MODELO: {{ item.modelo }} -</label>
-                                <label *ngIf="item.marca!=''">MARCA: {{ item.marca }} -</label>
-                                <label *ngIf="item.talla!=''">TALLA: {{ item.talla }} -</label>
-                            </div>
-                        </mat-option>
-                    </mat-select>
-                    
-                </mat-form-field-->
                 <mat-form-field appearance="fill" class="flex-fill">
                     <mat-label>ARTÍCULOS</mat-label>
                     <input type="text" aria-label="articulo_ingresar" matInput #article formControlName="articulo_ingresar" [matAutocomplete]="articuloAutocomplete">
@@ -89,12 +75,7 @@
                 <button mat-raised-button color="primary" style="padding: 30px;" (click)="insertaArticulo()">
                     <mat-icon>add_box</mat-icon>
                 </button>
-                <!--mat-form-field appearance="fill" class="flex-fill" *ngIf="movto.value == 2">
-                    <mat-label>TRABAJADOR: </mat-label>
-                    <mat-select formControlName='trabajador_ingresar' #articulo (selectionChange)="personalSeleccionado($event)">
-                        <mat-option *ngFor="let item of filterCatalogs['personal']" [value]="item.id">{{ item.descripcion }}</mat-option>
-                    </mat-select>
-                </mat-form-field-->
+                
                 <mat-form-field appearance="fill" class="flex-fill" *ngIf="movto.value == 2">
                     <mat-label>TRABAJADOR</mat-label>
                     <input type="text" aria-label="trabajador_ingresar" matInput formControlName="trabajador_ingresar" [matAutocomplete]="trabajadorAutocomplete">

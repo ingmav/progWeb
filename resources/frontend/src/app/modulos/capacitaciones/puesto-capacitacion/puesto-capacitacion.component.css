@@ -1,0 +1,54 @@
+.principal
+{
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    height: 90%;
+    padding: 1%;
+}
+
+.listado
+{
+    flex: 4 1 auto;
+    border: 1px solid #CFCFCF;
+    flex-grow: 4;
+    width: 100%; 
+    overflow-y: auto;
+}
+
+.botones
+{
+    flex: 1 1 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.botones-centrales
+{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.title
+{
+    background-color: darkblue;
+    color: white;
+    padding: 10px 10px;
+    
+}
+
+ul{
+    list-style: none;
+    margin: 0;
+    padding: 0 0;
+    
+}
+
+.seleccionados
+{
+    
+    
+}
+

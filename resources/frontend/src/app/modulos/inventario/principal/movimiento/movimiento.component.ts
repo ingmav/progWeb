@@ -184,9 +184,6 @@ export class MovimientoComponent {
   }
 
   private _filter(value: any, catalog: string, valueField: string): string[] {
-    console.log(value);
-    console.log(catalog);
-    console.log(valueField);
     let filterValue = '';
     if(value){
       if(typeof(value) == 'object'){
@@ -297,25 +294,6 @@ export class MovimientoComponent {
       this.dialogMaxSize = false;
     }
   }
-
-
-  /*articuloSeleccionado(event: MatSelectChange)
-  {
-    this.articulo = {
-      id: event.value,
-      descripcion: event.source.triggerValue
-    };
-    this.validaIngresos();
-  }
-  
-  personalSeleccionado(event: MatSelectChange)
-  {
-    this.personal = {
-      id: event.value,
-      descripcion: event.source.triggerValue
-    };
-    this.validaIngresos();
-  }*/
 
   agregarArticulo() {
       let data = this.form.value;

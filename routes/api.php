@@ -51,12 +51,23 @@ Route::group(['middleware'=>'auth'],function($router){
     Route::apiResource('inventario',                'API\Modulos\Inventario\InventarioController');
     Route::apiResource('inventario-personal',       'API\Modulos\Inventario\PersonalController');
     Route::apiResource('inventario-articulo',       'API\Modulos\Inventario\ArticuloController');
+
+    Route::apiResource('puesto',                    'API\Modulos\Capacitacion\PuestoController');
+    Route::apiResource('capacitacion',              'API\Modulos\Capacitacion\CapacitacionController');
+    
     Route::get('catalogo-unidad',                   'API\Modulos\Inventario\ArticuloController@catalogoUnidad');
     Route::get('catalogos',                         'API\Modulos\Inventario\ArticuloController@catalogos');
     Route::get('cardex/{id}',                       'API\Modulos\Inventario\ArticuloController@cardex');
     Route::post('subir-imagen',                     'API\Modulos\Inventario\ArticuloController@SubirImagen');
     Route::get('ver-imagen',                        'API\Modulos\Inventario\ArticuloController@VerImagen');
     Route::get('ver-historial-trabajador',          'API\Modulos\Inventario\PersonalController@VerHistorial');
+
+    Route::put('rel-puesto-capacitacion/{id}',      'API\Modulos\Capacitacion\PuestoController@RelPuestoCapacitacion');
+    Route::get('rel-personal-capacitacion/{id}',    'API\Modulos\Capacitacion\PuestoController@RelPersonalCapacitacion');
+    Route::get('personal-capacitacion',             'API\Modulos\Inventario\PersonalController@RelTrabajadorCapacitacion');
+    Route::post('rel-empleado-capacitacion',        'API\Modulos\Capacitacion\PuestoController@RelTrabajadorCapacitacion');
+    Route::get('ver-capacitaciones/{id}',                'API\Modulos\Capacitacion\PuestoController@VerCapacitaciones');
+    
 });
 
 Route::middleware('auth')->get('/avatar-images', function (Request $request) {
