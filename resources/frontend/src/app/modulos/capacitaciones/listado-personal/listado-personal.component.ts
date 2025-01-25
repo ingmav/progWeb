@@ -52,24 +52,17 @@ export class ListadoPersonalComponent {
       }, 10);
       
     }
-  
-
-    // cargarFrom()
-    // {
-    //   let dialogConfig:any = {
-    //     width: '50%',
-    //     height: '80%',
-    //     disableClose: true,
-    //     data: { form: {id:1, descripcion: "programador"}}
-    //   };
-      
-    //   const dialogRef = this.dialog.open(PuestoCapacitacionComponent,dialogConfig);
-  
-    //   dialogRef.afterClosed().subscribe(result => {
-    //       //this.applySearch();
-        
-    //   });
-    // }
+    
+    ngAfterViewInit(){
+    
+      this.paginator.page.subscribe(()=>{
+        if(this.pageSize != this.paginator.pageSize){
+          this.paginator.pageIndex = 0;
+          this.pageSize = this.paginator.pageSize;
+        }
+        this.applySearch();
+      });
+    }
 
     cleanSearch(){
       this.searchQuery = '';
@@ -101,10 +94,7 @@ export class ListadoPersonalComponent {
       });
     }
 
-    printPdf(){}
-    openDialogHistorial(){}
-    openDialogMovto(){}
-    openDialogCardex(obj){}
+    
     openDialogCapacitaciones(obj){
       console.log(obj);
       let dialogConfig:any = {
