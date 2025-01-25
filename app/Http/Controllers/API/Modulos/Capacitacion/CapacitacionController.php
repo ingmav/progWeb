@@ -71,7 +71,9 @@ class CapacitacionController extends Controller
                 {
                     $obj = new Capacitacion();
                 }
-                $obj->descripcion           = strtoupper($parametros['descripcion']);
+                $obj->catalogo_tipo_categoria           = strtoupper($parametros['catalogo_tipo_categoria']);
+                $obj->norma                             = strtoupper($parametros['norma']);
+                $obj->descripcion                       = strtoupper($parametros['descripcion']);
                 
                 $obj->save();
                 DB::commit();

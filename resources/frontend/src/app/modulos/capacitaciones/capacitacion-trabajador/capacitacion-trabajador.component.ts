@@ -9,6 +9,7 @@ import { CatalogosService } from '../catalogos.service';
 import { MatPaginator } from '@angular/material/paginator';
 import { AlertPanelComponent } from 'src/app/shared/components/alert-panel/alert-panel.component';
 import { DialogConfirmActionComponent } from 'src/app/shared/components/dialog-confirm-action/dialog-confirm-action.component';
+import { FormCapacitacionDialogComponent } from '../form-capacitacion-dialog/form-capacitacion-dialog.component';
 
 
 @Component({
@@ -28,10 +29,18 @@ export class CapacitacionTrabajadorComponent {
   isLoading:boolean;
   data:any = [];
   pageSize:number = 50;
-  displayedColumns: string[] = ['descripcion','ultimo_movimiento'];
+  displayedColumns: string[] = ['descripcion', 'norma','ultimo_movimiento'];
   resultsLength = 0;
   isLoadingResults:boolean = false;
   searchQuery:string;
+  categorias:any = [
+    {id:0, descripcion:""},
+    {id:1, descripcion:"SEGURIDAD E HIGIENE"},
+    {id:2, descripcion:"CAPACITACIÓN, ADIESTRAMIENTO Y PRODUCTIVIDAD LABORAL"},
+    {id:3, descripcion:"PROTECCIÓN CIVIL"},
+    {id:4, descripcion:"SIMULACROS"},
+    {id:5, descripcion:"MEDIO AMBIENTE"},
+  ]
 
   constructor(
     public dialogRef: MatDialogRef<CapacitacionTrabajadorComponent>,
@@ -119,12 +128,12 @@ export class CapacitacionTrabajadorComponent {
   {
     let dialogConfig:any = {
       width: '50%',
-      height: '120px',
+      height: '200px',
       disableClose: true,
       data: { api:'capacitacion', titulo:'CAPACITACIONES', accion:"NUEVO" }
     };
     
-    const dialogRef = this.dialog.open(FormCatalogoDialogComponent,dialogConfig);
+    const dialogRef = this.dialog.open(FormCapacitacionDialogComponent,dialogConfig);
 
     dialogRef.afterClosed().subscribe(result => {
         this.applySearch();
@@ -136,12 +145,12 @@ export class CapacitacionTrabajadorComponent {
   {
     let dialogConfig:any = {
       width: '50%',
-      height: '120px',
+      height: '200px',
       disableClose: true,
       data: { api:'capacitacion', titulo:'CAPACITACIONES', accion:"EDITAR", form:obj}
     };
     
-    const dialogRef = this.dialog.open(FormCatalogoDialogComponent,dialogConfig);
+    const dialogRef = this.dialog.open(FormCapacitacionDialogComponent,dialogConfig);
 
     dialogRef.afterClosed().subscribe(result => {
         this.applySearch();

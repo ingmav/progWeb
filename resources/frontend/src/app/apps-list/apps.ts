@@ -74,7 +74,7 @@ export const APPS:App [] = [
         ] 
     },
     {
-        name: 'Capacitaciones', route: 'capacitaciones', icon: "assets/icons/capacitacion.png"
+        name: 'Capacitaciones', route: 'capacitaciones', icon: "assets/icons/capacitacion.png",                    permission:"Iwb1CJwx8czscgC7idM0keNsNIuQNLbr"
     }
     // { name:'Actividades', route: "actividades",  icon: "assets/icons/higiene.png", 
     //     menu:[

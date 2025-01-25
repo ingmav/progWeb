@@ -1,0 +1,50 @@
+<section class="flex-column" style="height: 100%; overflow: hidden; flex: 1 1 0%;" (document:keydown.escape)="cancelarAccion()"> <!-- Main Body <<<<<<< -->
+    <section class="dialog-toolbar"> 
+       <div class="flex-row">
+           <div class="label-info" >
+               {{ accion }} {{ formulario }}
+           </div>
+           <button mat-button (click)="guardar()" [disabled]="isLoading && form.valid">
+               <mat-icon>{{(changesDetected)?'save_as':'save'}}</mat-icon><span class="hide-xs">&nbsp;Guardar</span>
+           </button>
+           <div class="flex-fill"></div>
+           <div class="label-info screen-size-icon" *ngIf="currentScreenSize == 'xs' || currentScreenSize == 'sm'">
+               <mat-icon>phone_iphone</mat-icon>
+           </div>
+           <button mat-button class="boton-accion" (click)="resizeDialog()" [matTooltip]="(dialogMaxSize)?'Restaurar':'Maximizar'" [matTooltipPosition]="'left'" tabindex="-1" *ngIf="currentScreenSize != 'xs' && currentScreenSize != 'sm'">
+               <mat-icon>{{(dialogMaxSize)?'fit_screen':'fullscreen'}}</mat-icon>
+           </button>
+           <button class="boton-accion boton-cerrar" mat-button (click)="cerrar()" tabindex="-1"><mat-icon>close</mat-icon></button>
+       </div>
+   </section> 
+   <section>
+       <mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
+       <alert-panel></alert-panel>
+   </section> 
+   
+   
+   <div class="flex-fill flex-column flex-gap">
+       <mat-card class="flex-column flex-gap xs-max-height-user-form" style="padding: 8px;" [formGroup]="form">
+            <div class="flex-row flex-xs-column flex-fill flex-gap">
+                <mat-form-field appearance="fill" class="flex-fill">
+                    <mat-label>TIPO: </mat-label>
+                    <mat-select  formControlName='catalogo_tipo_categoria' required>
+                        <mat-option *ngFor="let item of categorias" [value]="item.id">{{ item.descripcion }}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field appearance="fill" class="flex-fill">
+                    <mat-label>NORMA: </mat-label>
+                    <input type="text" matInput autocomplete="off" formControlName="norma" placeholder="Norma" >
+                    <mat-error *ngIf="form.get('norma').hasError('required')">Este campo es obligatorio</mat-error>
+                </mat-form-field>
+            </div>
+            <div class="flex-row flex-xs-column flex-fill flex-gap">
+               <mat-form-field appearance="fill" class="flex-fill">
+                   <mat-label>DESCRIPCION: </mat-label>
+                   <input type="text" matInput autocomplete="off" formControlName="descripcion" placeholder="Descripción" >
+                   <mat-error *ngIf="form.get('descripcion').hasError('required')">Este campo es obligatorio</mat-error>
+               </mat-form-field>
+           </div>
+       </mat-card>
+   </div>                
+</section>

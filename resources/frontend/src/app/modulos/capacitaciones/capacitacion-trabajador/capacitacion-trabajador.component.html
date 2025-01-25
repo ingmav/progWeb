@@ -38,10 +38,19 @@
                         <th mat-header-cell *matHeaderCellDef>DESCRIPCIÓN</th>
                         <td mat-cell *matCellDef="let row">
                             {{ row.descripcion }}
+                            <div style="font-size: 9pt;">
+                                {{ categorias[row.catalogo_tipo_categoria].descripcion }}
+                            </div>
                             
                         </td>
                     </ng-container>
-    
+                    <ng-container matColumnDef="norma">
+                        <th mat-header-cell *matHeaderCellDef>NORMA</th>
+                        <td mat-cell *matCellDef="let row">
+                            {{ row.norma }}
+                            
+                        </td>
+                    </ng-container>
                     <ng-container matColumnDef="ultimo_movimiento">
                         <th width="1" style="white-space: nowrap;" mat-header-cell *matHeaderCellDef mat-sort-header>ÚLTIMO MOVIMIENTO</th>
                         <td mat-cell *matCellDef="let row" style="white-space: nowrap; text-align: center;">
