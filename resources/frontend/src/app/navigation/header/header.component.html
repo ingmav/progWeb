@@ -28,7 +28,10 @@
   
   <mat-menu #navAppMenu="matMenu">
     <ng-template matMenuContent let-identificador="identificador">
-      <button mat-menu-item *ngFor="let item of modulos[identificador]" routerLink="{{item.route}}"><mat-icon>{{ item.icon }}</mat-icon> {{ item.name }}</button>
+      <button mat-menu-item *ngFor="let item of modulos[identificador]" routerLink="{{item.route}}">
+        <mat-icon *ngIf="item.icon !=''">{{ item.icon }}</mat-icon> 
+        <i *ngIf="item.unicon !=''" class="{{ item.unicon }} unicon">  </i>
+        {{ item.name }}</button>
     </ng-template>
   </mat-menu>
   

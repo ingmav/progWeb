@@ -163,6 +163,8 @@ class ArticuloController extends Controller
             $parametros = $request->all();
             $cardex = Movtos::join("movtos_detalles", "movtos_detalles.movtos_id", "movtos.id")
                             ->leftJoin("catalogo_personal", "catalogo_personal.id", "movtos_detalles.catalogo_personal_id")
+                            ->leftJoin("rel_trabajador_puesto", "rel_trabajador_puesto.catalogo_personal_id", "catalogo_personal.id")
+                            ->leftJoin("catalogo_puesto", "catalogo_puesto.id", "rel_trabajador_puesto.catalogo_puesto_id")
                             ->where("movtos_detalles.articulo_id", $id)
                             ->whereNull("movtos.deleted_at")   
                             ->whereNull("movtos_detalles.deleted_at")   
@@ -171,6 +173,7 @@ class ArticuloController extends Controller
                                     "movtos.tipo_movto",
                                     "catalogo_personal.descripcion",
                                     "catalogo_personal.cargo",
+                                    DB::RAW("catalogo_puesto.descripcion as puesto"),
                                     "movtos_detalles.cantidad")
                                     ->orderBy("fecha_movimiento", "desc");
 

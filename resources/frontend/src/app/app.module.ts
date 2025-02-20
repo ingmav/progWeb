@@ -41,6 +41,7 @@ import { ActividadesModule } from './modulos/actividades/actividades.module';
 import { registerLocaleData } from '@angular/common';
 import locale from '@angular/common/locales/es-MX';
 import { CapacitacionesModule } from './modulos/capacitaciones/capacitaciones.module';
+import { RhModule } from './modulos/rh/rh.module';
 
 
 registerLocaleData(locale);
@@ -68,6 +69,7 @@ registerLocaleData(locale);
     InventarioModule,
     ActividadesModule,
     CapacitacionesModule,
+    RhModule,
     WildcardRoutingModule,
   ],
   providers: [

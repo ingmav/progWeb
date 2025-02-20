@@ -2,6 +2,7 @@ export class App {
     name:string;
     route: string;
     icon: string;
+    unicon?: string;
     permission?: string; //Si tiene permisos se motrara/oculatara dependiendo de los permisos que el usuario tenga asignado
     hideHome?:boolean; //Si es verdadero ocultara el elemento que dirige a raiz, en la lista que aparece en los modulos con hijos (la raiz es la ruta de la aplicación padre)
     isHub?:boolean; //Si es verdadero solo mostrara la aplicación en el HUB cuando tenga al menos un hijo activo, de lo contario se ocultara, si es falso siempre estara presente en el HUB (tomando encuenta los permisos asignados) sin importar si tiene hijos o no activos
@@ -75,16 +76,19 @@ export const APPS:App [] = [
     },
     {
         name: 'Capacitaciones', route: 'capacitaciones', icon: "assets/icons/capacitacion.png",                    permission:"Iwb1CJwx8czscgC7idM0keNsNIuQNLbr"
-    }
-    // { name:'Actividades', route: "actividades",  icon: "assets/icons/higiene.png", 
-    //     menu:[
-    //         {
-    //             name:'Actividades',
-    //             icon: 'menu_open',
-    //             identificador:'actividades',
-    //             children:[
-    //                 { name:"Listado",      route: "actividades/listado",          icon: "inbox" },
-    //         ]}
-    //     ] 
-    // },
+    },
+    { name:'Recursos humanos', route: "recursos-humanos",  icon: "assets/icons/rh.png", 
+    menu:[
+        {
+            name:'Modulos',
+            icon: 'menu_open',
+            identificador:'entrevista',
+            children:[
+                {   name:"Listado-Entrevista",      route: "recursos-humanos/listado-entrevista",           icon: "", unicon: "uil uil-edit-alt" },
+                {   name:"Listado-Expediente",      route: "recursos-humanos/listado-expediente",           icon: "folder_shared" },
+                {   name:"Listado-Contrato",        route: "recursos-humanos/listado-contrato",             icon: "", unicon:'uil uil-file-check-alt' },
+        ]}
+    ] 
+},
+ 
 ]

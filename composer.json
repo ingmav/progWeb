@@ -18,6 +18,7 @@
         "laravel/tinker": "^2.0",
         "laravel/ui": "^3.2",
         "maatwebsite/excel": "^3.1",
+        "predis/predis": "^2.3",
         "rats/zkteco": "^002.0",
         "roave/better-reflection": "^4.12",
         "spatie/laravel-robots-middleware": "^1.3",

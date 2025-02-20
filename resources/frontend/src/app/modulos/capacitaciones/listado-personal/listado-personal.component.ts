@@ -12,6 +12,7 @@ import { ListaPersonalComponent } from '../../inventario/catalogos/personal/list
 import { TrabajadorComponent } from '../trabajador/trabajador.component';
 import { AsignarCapacitacionDialogComponent } from '../asignar-capacitacion-dialog/asignar-capacitacion-dialog.component';
 import { VerCapacitacionesComponent } from '../ver-capacitaciones/ver-capacitaciones.component';
+import { DialogConfirmActionComponent } from 'src/app/shared/components/dialog-confirm-action/dialog-confirm-action.component';
 
 @Component({
   selector: 'app-listado-personal',
@@ -177,5 +178,33 @@ export class ListadoPersonalComponent {
           this.applySearch();
         }
       });
+    }
+
+    eliminar(id)
+    {
+      return this.catalogosService.Eliminar('inventario-personal',id,{}).subscribe({
+        next:(response:any) => {
+          this.applySearch();
+        },
+        error:(response:any) => {
+          this.alertPanel.showError(response.error.message);
+          this.isLoadingResults = false;
+        }
+      });
+    }
+
+    deleteRow(obj)
+    {
+      console.log();
+          const dialogRef = this.dialog.open(DialogConfirmActionComponent, {
+            width: '500px',
+            data: {title:'Eliminar Registro',message:'¿Esta seguro de eliminar este registro?',hasOKBtn:true,btnColor:'warn',btnText:'Eliminar',btnIcon:'delete'}
+          });
+      
+          dialogRef.afterClosed().subscribe(reponse => {
+            if(reponse){
+              this.eliminar(obj.id);
+            }
+          });
     }
 }

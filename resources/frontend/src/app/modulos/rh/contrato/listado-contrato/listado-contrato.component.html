@@ -1,4 +1,3 @@
-
 <div class="flex-row flex-gap module-search-bar">
     <mat-form-field class="flex-fill" appearance="fill">
         <mat-label>Buscar</mat-label>
@@ -10,28 +9,16 @@
             <mat-icon>search</mat-icon>
         </button>
     </mat-form-field>
-    <button mat-button  [disabled]="true"  *ngIf="isLoadingCardex">
+    <button mat-button  [disabled]="true">
         GENERANDO CARDEX
         <mat-progress-bar  mode="query"></mat-progress-bar>
     </button>
-    <!--<button mat-icon-button  [disabled]="isLoadingPDF" (click)="printPdf()">
+    <button mat-icon-button  [disabled]="isLoadingPDF" (click)="printPdf()">
         <mat-icon svgIcon="pdf-icon"></mat-icon>
         <mat-progress-bar *ngIf="isLoadingPDF" mode="query"></mat-progress-bar>
     </button>
-     <button mat-raised-button color="warn" (click)="openDialogHistorial()" [matTooltip]="'Historial por Empleado'"><mat-icon>history</mat-icon></button>
+    <button mat-raised-button color="warn" (click)="openDialogHistorial()" [matTooltip]="'Historial por Empleado'"><mat-icon>history</mat-icon></button>
     <button mat-raised-button color="primary" (click)="openDialogMovto()" [matTooltip]="'Nuevo Movimiento'"><mat-icon>add</mat-icon></button>
-     -->
-    <button  [matMenuTriggerFor]="menu" mat-raised-button color="primary" ><mat-icon>menu</mat-icon></button>
-    <mat-menu #menu="matMenu">
-      <button mat-menu-item (click)="asignarCapacitacion()" class="mat-menu"><i class="uil uil-user-check" style="font-size: 16pt; padding: 0pt 7pt;"></i>ASIGNAR CAPACITACIONES</button>
-      <!-- <button mat-menu-item><mat-icon>history</mat-icon>HISTORIAL DE CAPACITACIONES</button> -->
-      
-      <mat-divider></mat-divider>
-      <button mat-menu-item>CATALOGOS</button>
-      <button mat-menu-item (click)="listadoTrabajador()"><mat-icon>person_pin</mat-icon>TRABAJADOR</button>
-      <button mat-menu-item (click)="listadoPuesto()"><mat-icon>work</mat-icon>PUESTOS</button>
-      <button mat-menu-item (click)="listadoCapacitacion()"><mat-icon>book</mat-icon>CAPACITACIONES</button>
-    </mat-menu>
 </div>
 
 <div>
@@ -43,55 +30,52 @@
     <div class="flex-column" style="height: 100%;">
         <div class="main-list-table left-click-open flex-fill">
             <table mat-table [dataSource]="data" matSort matSortActive="updated_at" matSortDirection="desc">
-                <ng-container matColumnDef="empleado">
-                    <th mat-header-cell *matHeaderCellDef>EMPLEADO</th>
+                <ng-container matColumnDef="descripcion">
+                    <th mat-header-cell *matHeaderCellDef>DESCRIPCIÓN</th>
                     <td mat-cell *matCellDef="let row">
                         {{ row.descripcion }}
-                        <div style="font-size: 7pt;" *ngIf="row.cargo">{{ row.cargo.puesto.descripcion }}</div>
                         
                     </td>
                 </ng-container>
 
-                <ng-container matColumnDef="capacitaciones">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="hide-xs  hide-sm">CAPACITACIONES</th>
+                <ng-container matColumnDef="datos">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="hide-xs  hide-sm">DATOS</th>
                     <td mat-cell *matCellDef="let row" class="hide-xs  hide-sm">
-                        <div *ngIf="row.cargo">
-                            <!-- <mat-progress-bar
-                                mode="buffer"
-                                value="{{ row.capacitaciones.length }}"
-                                [bufferValue]="row.cargo.puesto.capacitaciones.length - row.capacitaciones.length"
-                                style="width: 100%"
-                                ></mat-progress-bar> -->
-                                <mat-progress-bar mode="determinate" value="{{ (row.capacitaciones.length / row.cargo.puesto.capacitaciones.length)*100 }}"></mat-progress-bar>
-                          {{ row.capacitaciones.length }} / {{ row.cargo.puesto.capacitaciones.length }}
-                        </div>
-                        <div *ngIf="!row.cargo">
-                            -- PUESTO NO ASIGNADO --
+                        Marca: <label *ngIf="row.marca==''">-----</label><label *ngIf="row.marca!=''">{{row.marca}}</label>  
+                        Modelo: <label *ngIf="row.modelo==''">-----</label><label *ngIf="row.modelo!=''">{{row.modelo}}</label>
+                        <div style="font-size: 9pt;" *ngIf="row.talla!='' || row.talla!=null">
+                            Talla: <label *ngIf="row.talla==''">-----</label><label *ngIf="row.talla!=''">{{row.talla}}</label>
                         </div>
                     </td>
                 </ng-container>
 
-                <ng-container matColumnDef="porcentaje">
-                    <th mat-header-cell *matHeaderCellDef class="hide-xs  hide-sm">PORCENTAJE</th>
+                <ng-container matColumnDef="inventario">
+                    <th mat-header-cell *matHeaderCellDef class="hide-xs  hide-sm">INVENTARIO</th>
                     <td mat-cell *matCellDef="let row" class="hide-xs hide-sm">
-                        <div *ngIf="row.cargo">
-                            {{ (row.capacitaciones.length / row.cargo.puesto.capacitaciones.length)*100 | number:'1.2-2' }} %
+                        <div matTooltip="min: {{ row.min}} - max: {{ row.max}}" [ngClass]="{'correcto': row.inventario>row.min, 'incorrecto':row.inventario==row.min}">
+                            {{ row.inventario }}
                         </div>
-                        <div *ngIf="!row.cargo">
-                            -- PUESTO NO ASIGNADO --
-                        </div>
+                        
+                                
                     </td>
                 </ng-container>
 
-               
+                <ng-container matColumnDef="imagen">
+                    <th mat-header-cell *matHeaderCellDef class="hide-xs">FOTO</th>
+                    <td mat-cell *matCellDef="let row" class="hide-xs">
+                        <div *ngIf="row.extension != null">
+                            <mat-icon (click)="VerImagen(row)">image</mat-icon>
+                        </div>          
+                    </td>
+                </ng-container>
                 
                 <ng-container matColumnDef="ultimo_movimiento">
                     <th width="1" style="white-space: nowrap;" mat-header-cell *matHeaderCellDef mat-sort-header>ÚLTIMO MOVIMIENTO</th>
                     <td mat-cell *matCellDef="let row" style="white-space: nowrap; text-align: center;">
-                        <span *ngIf="!row.updated_at">Nunca</span>
-                        <span *ngIf="row.updated_at">
-                            {{row.updated_at | date:'dd - MMM - y'}}<br>
-                            {{row.updated_at | date:'h:mm a'}}
+                        <span *ngIf="!row.ultimo_movimiento">Nunca</span>
+                        <span *ngIf="row.ultimo_movimiento">
+                            {{row.ultimo_movimiento | date:'dd - MMM - y'}}<br>
+                            {{row.ultimo_movimiento | date:'h:mm a'}}
                         </span>
                     </td>
                 </ng-container>
@@ -129,9 +113,9 @@
 </mat-card>
 
 <ng-template #rowMenu let-row="row" let-status="status">
-    <div class="context-menu mat-elevation-z2" cdkMenu  *ngIf="row.cargo">
-        <button class="context-menu-item" cdkMenuItem (click)="openDialogCapacitaciones(row)"><mat-icon>receipt</mat-icon>&nbsp;VER CAPACITACIONES</button>
-        <button class="context-menu-item" cdkMenuItem (click)="deleteRow(row)"><mat-icon style="color: red;">delete</mat-icon>&nbsp;DAR DE BAJA</button>
+    <div class="context-menu mat-elevation-z2" cdkMenu>
+        <button class="context-menu-item" cdkMenuItem (click)="openDialogCardex(row)"><mat-icon>receipt</mat-icon>&nbsp;Cardex</button>
+        <button class="context-menu-item" cdkMenuItem (click)="imprimirCardex(row)"><mat-icon  svgIcon="pdf-icon"></mat-icon>&nbsp;Imprimir Cardex</button>
         
     </div>
 </ng-template>

@@ -58,7 +58,7 @@ return [
             'prefix_indexes' => true,
             'strict' => false,
             'engine' => 'InnoDB',
-            'options' => array(PDO::MYSQL_ATTR_LOCAL_INFILE => true, PDO::ATTR_EMULATE_PREPARES => false),
+            'options' => [PDO::MYSQL_ATTR_LOCAL_INFILE => true, PDO::ATTR_EMULATE_PREPARES => false],
             /*extension_loaded('pdo_mysql') ? array_filter([
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
             ]) : [],*/
@@ -125,6 +125,8 @@ return [
         'options' => [
             'cluster' => env('REDIS_CLUSTER', 'predis'),
             'prefix' => Str::slug(env('APP_NAME', 'laravel'), '_').'_database_',
+            //'serializer' => Redis::SERIALIZER_MSGPACK,
+            //'compression' => Redis::COMPRESSION_LZ4,
         ],
 
         'default' => [
@@ -132,6 +134,8 @@ return [
             'password' => env('REDIS_PASSWORD', null),
             'port' => env('REDIS_PORT', 6379),
             'database' => env('REDIS_DB', 0),
+            'url' => 'tcp://127.0.0.1:6379?database=0',
+            'read_write_timeout' => 60,
         ],
 
         'cache' => [
@@ -139,6 +143,17 @@ return [
             'password' => env('REDIS_PASSWORD', null),
             'port' => env('REDIS_PORT', 6379),
             'database' => env('REDIS_CACHE_DB', 1),
+            'url' => 'tcp://127.0.0.1:6380?database=1'
+        ],
+        'clusters' => [
+            'default' => [
+                [
+                    'host' => env('REDIS_HOST', 'localhost'),
+                    'password' => env('REDIS_PASSWORD', null),
+                    'port' => env('REDIS_PORT', 6379),
+                    'database' => 0,
+                ],
+            ],
         ],
 
     ],

@@ -94,7 +94,8 @@
                                             <div *ngIf="row.tipo_movto == 1">{{ row.proveedor }}</div>
                                             <div *ngIf="row.tipo_movto == 2">
                                                 <div>{{ row.descripcion }}</div>
-                                                <div style="font-size: 10pt;">{{ row.cargo }}</div>
+                                                <div style="font-size: 10pt;" *ngIf="row.puesto!=''">{{ row.puesto }}</div>
+                                                <div style="font-size: 10pt;" *ngIf="row.puesto==null">{{ row.cargo }}</div>
                                             </div>
                                             
                                         </td>

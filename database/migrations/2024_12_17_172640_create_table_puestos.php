@@ -20,16 +20,16 @@ class CreateTablePuestos extends Migration
             $table->softDeletes();
         });
 
-        /*Schema::create('catalogo_tipo_categoria', function (Blueprint $table) {
+        Schema::create('catalogo_tipo_categoria', function (Blueprint $table) {
             $table->id();
             $table->string("descripcion",250);
             $table->timestamps();
             $table->softDeletes();
-        });*/
+        });
 
         Schema::create('catalogo_capacitacion', function (Blueprint $table) {
             $table->id();
-            $table->smallInteger("catalogo_tipo_categoria");
+            $table->bigInteger("catalogo_tipo_categoria")->unsigned();
             $table->string("norma",100);
             $table->string("descripcion",300);
             $table->timestamps();
@@ -80,6 +80,7 @@ class CreateTablePuestos extends Migration
         Schema::dropIfExists('rel_trabajador_puesto');
         Schema::dropIfExists('rel_puesto_capacitacion');
         Schema::dropIfExists('catalogo_capacitacion');
+        Schema::dropIfExists('catalogo_tipo_categoria');
         Schema::dropIfExists('catalogo_puesto');
     }
 }
