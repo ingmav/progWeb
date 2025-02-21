@@ -33,7 +33,7 @@ export const APPS:App [] = [
         },
       ],
     },
-    { name:'Control de Acceso', route: "control-acceso",  icon: "assets/icons/control-acceso.svg",        permission:"hr5UhgMTDmF9EiLYeq5x0cz0e281IWRU", 
+    { name:'Control de Acceso', route: "control-acceso",  icon: "assets/icons/control-acceso.svg",        permission:"hr5UhgMTDmF9EiLYeq5x0cz0e281IWRU",
         menu:[
             {
                 name:'Administrar',
@@ -52,9 +52,9 @@ export const APPS:App [] = [
                     { name:'Permisos',      route: "control-acceso/permisos",          icon: "key",                    permission:"tTVayONYIDylH9dk7jg5143h0FKoSpBi" },
                 ]
             }
-        ] 
+        ]
     },
-    { name:'Inventario Higiene', route: "inventario-higiene",  icon: "assets/icons/inventario.png", 
+    { name:'Inventario Higiene', route: "inventario-higiene",  icon: "assets/icons/inventario.png",
         menu:[
             {
                 name:'Inventario',
@@ -72,13 +72,13 @@ export const APPS:App [] = [
                     { name:'Personal',      route: "inventario-higiene/personal",          icon: "person_pin",                    permission:"bTCHPgL2Ovp0UslpRjS38HCp0N93o2zt" },
                 ]
             }
-        ] 
+        ]
     },
     {
         name: 'Capacitaciones', route: 'capacitaciones', icon: "assets/icons/capacitacion.png",                    permission:"Iwb1CJwx8czscgC7idM0keNsNIuQNLbr"
-    },
-    { name:'Recursos humanos', route: "recursos-humanos",  icon: "assets/icons/rh.png", 
-    menu:[
+    }/*,
+    { name:'Recursos humanos', route: "recursos-humanos",  icon: "assets/icons/rh.png",
+        menu:[
         {
             name:'Modulos',
             icon: 'menu_open',
@@ -88,7 +88,7 @@ export const APPS:App [] = [
                 {   name:"Listado-Expediente",      route: "recursos-humanos/listado-expediente",           icon: "folder_shared" },
                 {   name:"Listado-Contrato",        route: "recursos-humanos/listado-contrato",             icon: "", unicon:'uil uil-file-check-alt' },
         ]}
-    ] 
-},
- 
+    ]
+},*/
+
 ]

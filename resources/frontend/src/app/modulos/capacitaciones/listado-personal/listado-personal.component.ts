@@ -13,6 +13,7 @@ import { TrabajadorComponent } from '../trabajador/trabajador.component';
 import { AsignarCapacitacionDialogComponent } from '../asignar-capacitacion-dialog/asignar-capacitacion-dialog.component';
 import { VerCapacitacionesComponent } from '../ver-capacitaciones/ver-capacitaciones.component';
 import { DialogConfirmActionComponent } from 'src/app/shared/components/dialog-confirm-action/dialog-confirm-action.component';
+import { HistoryDialogComponent } from '../history-dialog/history-dialog.component';
 
 @Component({
   selector: 'app-listado-personal',
@@ -164,6 +165,23 @@ export class ListadoPersonalComponent {
       });
     }
     
+    HistoryCapacitaciones()
+    {
+      let dialogConfig:any = {
+        width: '80%',
+        height: '80%',
+        disableClose: true
+      };
+      
+      const dialogRef = this.dialog.open(HistoryDialogComponent,dialogConfig);
+  
+      dialogRef.afterClosed().subscribe(result => {
+        if(result){
+          this.applySearch();
+        }
+      });
+    }
+
     listadoCapacitacion(){
       let dialogConfig:any = {
         width: '80%',
