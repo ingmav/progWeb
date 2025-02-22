@@ -1,5 +1,5 @@
 .login {
-    background: url('../../../assets/bk4.jpg') no-repeat center center fixed; 
+    background: url('../../../assets/sistema.jpeg') no-repeat center center fixed; 
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -37,8 +37,8 @@
 
 .box-login
 {
-    opacity: 0.8;
-    filter: alpha(opacity=80); 
+    /*opacity: 0.8;
+    filter: alpha(opacity=80);*/ 
     margin:0px; 
     padding-bottom:10px; 
     padding-top:10px;

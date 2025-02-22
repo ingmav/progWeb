@@ -149,6 +149,47 @@ class PuestoController extends Controller
             throw new \App\Exceptions\LogError('Ocurrio un error',0,$e);
         } 
     }
+
+    public function HistoryPersonalCapacitacion($id, Request $request)
+    {
+        try{
+            $parametros = $request->all(); 
+            //$parametros = $parametros['params']; 
+            
+            $obj = CatalogoPersonal::whereRaw("id in (select catalogo_personal_id from rel_trabajador_puesto where deleted_at is null and catalogo_puesto_id in (select catalogo_puesto_id from rel_puesto_capacitacion where deleted_at is null and catalogo_capacitacion_id=$id))")
+                            ->with(["capacitaciones" => function($query) use($id){
+                                return $query->where('catalogo_capacitacion_id', $id);
+            }]);
+
+            if($parametros['estatus'] !=0)
+            {
+                if($parametros['estatus'] == 1)
+                {
+                    $obj = $obj->whereRaw("id in (select catalogo_personal_id from rel_trabajador_capacitacion where deleted_at is null and catalogo_capacitacion_id=$id)");
+                }else if($parametros['estatus'] == 2)
+                {
+                    $obj = $obj->whereRaw("id not in (select catalogo_personal_id from rel_trabajador_capacitacion where deleted_at is null and catalogo_capacitacion_id=$id)");
+                }
+            }
+
+            if($parametros['search'] !='')
+            {
+                $obj = $obj->where('descripcion','LIKE','%'.$parametros['search'].'%');
+            }
+
+            if(isset($parametros['page'])){
+                $resultadosPorPagina = isset($parametros["per_page"])? $parametros["per_page"] : 20;
+    
+                $obj = $obj->paginate($resultadosPorPagina);
+            } else {
+                $obj = $obj->get();
+            }
+            
+            return response()->json(['data'=>$obj], HttpResponse::HTTP_OK);
+        }catch(\Exception $e){
+            throw new \App\Exceptions\LogError('Ocurrio un error',0,$e);
+        } 
+    }
     
     public function RelTrabajadorCapacitacion(Request $request)
     {

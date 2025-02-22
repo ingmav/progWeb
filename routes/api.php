@@ -64,6 +64,7 @@ Route::group(['middleware'=>'auth'],function($router){
 
     Route::put('rel-puesto-capacitacion/{id}',      'API\Modulos\Capacitacion\PuestoController@RelPuestoCapacitacion');
     Route::get('rel-personal-capacitacion/{id}',    'API\Modulos\Capacitacion\PuestoController@RelPersonalCapacitacion');
+    Route::get('his-personal-capacitacion/{id}',    'API\Modulos\Capacitacion\PuestoController@HistoryPersonalCapacitacion');
     Route::get('personal-capacitacion',             'API\Modulos\Inventario\PersonalController@RelTrabajadorCapacitacion');
     Route::post('rel-empleado-capacitacion',        'API\Modulos\Capacitacion\PuestoController@RelTrabajadorCapacitacion');
     Route::get('ver-capacitaciones/{id}',                'API\Modulos\Capacitacion\PuestoController@VerCapacitaciones');
