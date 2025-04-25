@@ -10,6 +10,7 @@ import { map  } from 'rxjs/operators';
 export class ServicioPersonalService {
 
   url_principal            = `${environment.base_url}/inventario-personal`;
+  url_delete              = `${environment.base_url}/del-user-puesto`;
   
   constructor(private http: HttpClient) { }
   
@@ -31,6 +32,14 @@ export class ServicioPersonalService {
 
   eliminarElemento(id, payload):Observable<any> {
     return this.http.delete<any>(this.url_principal+"/"+id, {params: payload}).pipe(
+      map( response => {
+        return response;
+      })
+    );
+  }
+
+  eliminarRelacion(payload):Observable<any> {
+    return this.http.delete<any>(this.url_delete, {params: payload}).pipe(
       map( response => {
         return response;
       })

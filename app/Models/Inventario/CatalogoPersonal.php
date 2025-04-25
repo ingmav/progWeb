@@ -16,7 +16,7 @@ class CatalogoPersonal extends Model
     ];
 
     public function cargo(){
-        return $this->hasOne('App\Models\Capacitacion\RelTrabajadorPuesto', "catalogo_personal_id", "id");
+        return $this->hasMany('App\Models\Capacitacion\RelTrabajadorPuesto', "catalogo_personal_id", "id");
     }
     
     public function capacitaciones(){

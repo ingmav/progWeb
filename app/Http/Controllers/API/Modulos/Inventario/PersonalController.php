@@ -128,7 +128,7 @@ class PersonalController extends Controller
                 
                 if($obj_buscar == 0)
                 {
-                    RelTrabajadorPuesto::where("catalogo_personal_id", $obj->id)->delete();
+                    //RelTrabajadorPuesto::where("catalogo_personal_id", $obj->id)->delete();
                     $obj_new = new RelTrabajadorPuesto();
                     $obj_new->catalogo_personal_id = $obj->id;
                     $obj_new->catalogo_puesto_id = $parametros['cargo']['id'];
@@ -161,6 +161,8 @@ class PersonalController extends Controller
         }
     }
 
+ 
+
     public function RelTrabajadorCapacitacion(Request $request)
     {
         try{
@@ -169,7 +171,7 @@ class PersonalController extends Controller
             $parametros = $request->all();
             $obj = CatalogoPersonal::with(["cargo.puesto.capacitaciones", "capacitaciones" => function ($query) {
                 return $query->whereRaw('catalogo_capacitacion_id in 
-                (select catalogo_capacitacion_id from rel_puesto_capacitacion where catalogo_puesto_id = 
+                (select catalogo_capacitacion_id from rel_puesto_capacitacion where catalogo_puesto_id in 
                 (select catalogo_puesto_id from rel_trabajador_puesto where deleted_at is null and catalogo_personal_id=rel_trabajador_capacitacion.catalogo_personal_id))');
             }]);
             if($parametros['query']){

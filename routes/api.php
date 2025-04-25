@@ -26,6 +26,7 @@ Route::post('refresh',              'API\Auth\AuthController@refresh');
 Route::post('reset-password',       'API\Auth\AuthController@resetPassword');
 Route::post('send-reset-password',  'API\Auth\AuthController@sendResetPassword');
 
+
 /**
  *  Para envio de correos
  */
@@ -63,11 +64,15 @@ Route::group(['middleware'=>'auth'],function($router){
     Route::get('ver-historial-trabajador',          'API\Modulos\Inventario\PersonalController@VerHistorial');
 
     Route::put('rel-puesto-capacitacion/{id}',      'API\Modulos\Capacitacion\PuestoController@RelPuestoCapacitacion');
+    Route::delete('del-user-puesto',      'API\Modulos\Capacitacion\PuestoController@deleteRelUserPuesto');
     Route::get('rel-personal-capacitacion/{id}',    'API\Modulos\Capacitacion\PuestoController@RelPersonalCapacitacion');
     Route::get('his-personal-capacitacion/{id}',    'API\Modulos\Capacitacion\PuestoController@HistoryPersonalCapacitacion');
     Route::get('personal-capacitacion',             'API\Modulos\Inventario\PersonalController@RelTrabajadorCapacitacion');
     Route::post('rel-empleado-capacitacion',        'API\Modulos\Capacitacion\PuestoController@RelTrabajadorCapacitacion');
     Route::get('ver-capacitaciones/{id}',                'API\Modulos\Capacitacion\PuestoController@VerCapacitaciones');
+    
+    Route::post('importar-asistencia',        'API\Modulos\Nomina\AsistenciaController@importar');
+
     
 });
 

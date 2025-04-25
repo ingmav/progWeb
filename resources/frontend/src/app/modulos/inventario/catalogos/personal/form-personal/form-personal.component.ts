@@ -2,7 +2,6 @@ import { Component, Inject, OnInit, OnDestroy, ViewChild, ElementRef } from '@an
 import { SharedModule } from 'src/app/shared/shared.module';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MatTableDataSource } from '@angular/material/table';
 import { AlertPanelComponent } from 'src/app/shared/components/alert-panel/alert-panel.component';
 
 //Para checar tamaño de la pantalla
@@ -13,6 +12,7 @@ import { CustomValidator } from 'src/app/utils/classes/custom-validator';
 import { DialogConfirmActionComponent } from 'src/app/shared/components/dialog-confirm-action/dialog-confirm-action.component';
 import { ServicioPersonalService } from '../servicio-personal.service'
 import { CatalogosService } from 'src/app/modulos/capacitaciones/catalogos.service';
+import { MatTable } from '@angular/material/table';
 
 export interface DialogData {
   id: number;
@@ -29,7 +29,9 @@ export interface DialogData {
 })
 export class FormPersonalComponent {
   @ViewChild(AlertPanelComponent) alertPanel: AlertPanelComponent;
+  @ViewChild(MatTable) table: MatTable<any>;
 
+  action_form:string = "";
   constructor(
     public dialogRef: MatDialogRef<FormPersonalComponent>,
     @Inject(MAT_DIALOG_DATA) public inData: DialogData,
@@ -92,6 +94,9 @@ export class FormPersonalComponent {
   lastLogin:any;
 
   listaGrupos:any[];
+  displayedColumns: string[] = ['puesto', 'updated_at'];
+  data: any[];
+  isLoadingResults:boolean = false;
 
   ngOnInit(): void {
     this.savedData = false;
@@ -110,29 +115,34 @@ export class FormPersonalComponent {
 
   cargarCatalogo(){
 
+    this.isLoading = true;
     return this.catalogosService.Listar('puesto',{}).subscribe({
       next:(response:any) => {
-        console.log(response);
         this.filterCatalogs.cargo = response.data;
         //this.filteredCatalogs['cargo'] = response.data;
         this.filteredCatalogs['cargo'] = this.form.controls['cargo'].valueChanges.pipe(startWith(''),map(value => this._filter(value,'cargo','descripcion')));
 
+        this.action_form = "Nuevo ";
         if(this.inData.id !=0)
         {
+          this.action_form = "Edicion ";
           let datos = this.inData;
           let cargo = [];
-          if(datos.cargo)
+          this.data = this.inData.cargo;
+          //console.log("->",this.data);
+          /*if(datos.cargo)
           {
             cargo = datos.cargo.puesto;
             this.form.patchValue({id: datos.id, descripcion: datos.descripcion, cargo:cargo});
-          }else{
+          }else{*/
             this.form.patchValue({id: datos.id, descripcion: datos.descripcion});
-          }
+          //}
           
         }
+        this.isLoading = false;
       },
       error:(response:any) => {
-       
+        this.isLoading = false;
       }
     });
   }
@@ -184,6 +194,31 @@ export class FormPersonalComponent {
         }
       });
     }
+  }
+
+  eliminar(obj){
+    console.log("eliminar",obj);
+    const dialogRef = this.dialog.open(DialogConfirmActionComponent, {
+      width: '500px',
+      data: {title:'Eliminar Registro',message:'Esta seguro de eliminar este registro?',hasOKBtn:true,btnColor:'warn',btnText:'Eliminar',btnIcon:'delete'}
+    });
+
+    dialogRef.afterClosed().subscribe(reponse => {
+      if(reponse){
+        return this.servicioPersonalService.eliminarRelacion(obj).subscribe({
+          next:(response:any) => {
+            //console.log(this.inData);
+            let index = this.inData.cargo.findIndex(x => x.catalogo_puesto_id == obj.catalogo_puesto_id);
+            this.inData.cargo.splice(index,1);
+            this.table.renderRows();
+           },
+          error:(response:any) => {
+            this.alertPanel.showError(response.error.message);
+            this.isLoadingResults = false;
+          }
+        });
+      }
+    });
   }
 
   resizeDialog(){

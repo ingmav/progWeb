@@ -14,6 +14,7 @@ import { AsignarCapacitacionDialogComponent } from '../asignar-capacitacion-dial
 import { VerCapacitacionesComponent } from '../ver-capacitaciones/ver-capacitaciones.component';
 import { DialogConfirmActionComponent } from 'src/app/shared/components/dialog-confirm-action/dialog-confirm-action.component';
 import { HistoryDialogComponent } from '../history-dialog/history-dialog.component';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'app-listado-personal',
@@ -39,7 +40,8 @@ export class ListadoPersonalComponent {
     isLoadingCardex:boolean;
   
     searchQuery:string;
-  
+    colores:any= ["#fab8aa", "#aab0fa", "#acfaaa", "#efaafa", "#c7aafa", "#f3faaa", "#aafacc"];
+    
     pageSize:number = 50;
     displayedColumns: string[] = ['empleado','capacitaciones','porcentaje','ultimo_movimiento'];
     resultsLength = 0;
@@ -87,13 +89,38 @@ export class ListadoPersonalComponent {
         next:(response:any) => {
           this.isLoadingResults = false;
           this.resultsLength = response.data.total;
-          this.data = response.data.data;
+          //console.log(this.actualiza_plantilla(response.data.data));
+          this.data = this.actualiza_plantilla(response.data.data);
+          //this.data = response.data.data;
         },
         error:(response:any) => {
           this.alertPanel.showError(response.error.message);
           this.isLoadingResults = false;
         }
       });
+    }
+
+    actualiza_plantilla(data)
+    {
+      let datos = [];
+      
+      data.forEach(element => {
+        element.total_capacitaciones = 0;
+        let arreglo:any = [];
+        element.cargo.forEach(element2 =>{
+          element2.puesto.capacitaciones.forEach(element3 => {
+            if(arreglo.indexOf(element3.catalogo_capacitacion_id) == -1)
+            {
+              arreglo.push(element3.catalogo_capacitacion_id);
+            }
+          });
+          //element.total_capacitaciones += element2.puesto.capacitaciones.length;
+        });
+        element.total_capacitaciones = arreglo.length;
+        datos.push(element);  
+      });
+
+      return datos;
     }
 
     

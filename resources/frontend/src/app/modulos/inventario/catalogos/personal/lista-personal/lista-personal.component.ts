@@ -97,7 +97,7 @@ export class ListaPersonalComponent {
     let dialogConfig:any = {
       maxWidth: '100%',
       width: '80%',
-      height: '25%',
+      height: '50%',
       disableClose: true,
       data:{}
     };
@@ -113,9 +113,8 @@ export class ListaPersonalComponent {
     const dialogRef = this.dialog.open(FormPersonalComponent,dialogConfig);
 
     dialogRef.afterClosed().subscribe(result => {
-      if(result){
         this.applySearch();
-      }
+      
     });
   }
 

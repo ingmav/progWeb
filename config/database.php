@@ -42,6 +42,16 @@ return [
             'prefix' => '',
             'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
         ],
+        'firebird' => [
+        'driver'   => 'firebird',
+        'host'     => env('DB_HOST', '192.168.1.220'),
+        'port'     => env('DB_PORT', '3050'),
+        'database' => env('DB_DATABASE', 'c:\\\Microsip datos\\COMERCIALIZADORA.FDB'),
+        'username' => env('DB_USERNAME', 'sysdba'),
+        'password' => env('DB_PASSWORD', 'master1420'),
+        'charset'  => env('DB_CHARSET', 'UTF8'),
+        'role'     => null,
+        ],
 
         'mysql' => [
             'driver' => 'mysql',

@@ -76,8 +76,8 @@ export const APPS:App [] = [
     },
     {
         name: 'Capacitaciones', route: 'capacitaciones', icon: "assets/icons/capacitacion.png",                    permission:"Iwb1CJwx8czscgC7idM0keNsNIuQNLbr"
-    }/*,
-    { name:'Recursos humanos', route: "recursos-humanos",  icon: "assets/icons/rh.png",
+    },
+    { name:'Recursos humanos', route: "recursos-humanos",  icon: "assets/icons/rh.png"/*, permission:"6B5wwjYbGo6tp8E2jr30MdYnVPKRMLSp"*/,
         menu:[
         {
             name:'Modulos',
@@ -87,8 +87,15 @@ export const APPS:App [] = [
                 {   name:"Listado-Entrevista",      route: "recursos-humanos/listado-entrevista",           icon: "", unicon: "uil uil-edit-alt" },
                 {   name:"Listado-Expediente",      route: "recursos-humanos/listado-expediente",           icon: "folder_shared" },
                 {   name:"Listado-Contrato",        route: "recursos-humanos/listado-contrato",             icon: "", unicon:'uil uil-file-check-alt' },
+        ]},
+        {
+            name:'Nómina',
+            icon: 'menu_open',
+            identificador:'nomina',
+            children:[
+                {   name:"Asistencia",      route: "recursos-humanos/asistencia",           icon: "", unicon: "uil uil-user-square" },
         ]}
     ]
-},*/
+    },
 
 ]

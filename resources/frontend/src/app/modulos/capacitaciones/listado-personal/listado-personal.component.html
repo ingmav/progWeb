@@ -47,7 +47,10 @@
                         <th mat-header-cell *matHeaderCellDef>EMPLEADO</th>
                         <td mat-cell *matCellDef="let row">
                             {{ row.descripcion }}
-                            <div style="font-size: 7pt;" *ngIf="row.cargo">{{ row.cargo.puesto.descripcion }}</div>
+                            <div style="font-size: 7pt;" *ngIf="row.cargo">
+                                
+                                <!-- {{ row.cargo.puesto.descripcion }} -->
+                            </div>
                             
                         </td>
                     </ng-container>
@@ -55,17 +58,21 @@
                     <ng-container matColumnDef="capacitaciones">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header class="hide-xs  hide-sm">CAPACITACIONES</th>
                         <td mat-cell *matCellDef="let row" class="hide-xs  hide-sm">
-                            <div *ngIf="row.cargo">
-                                <!-- <mat-progress-bar
-                                    mode="buffer"
-                                    value="{{ row.capacitaciones.length }}"
-                                    [bufferValue]="row.cargo.puesto.capacitaciones.length - row.capacitaciones.length"
-                                    style="width: 100%"
-                                    ></mat-progress-bar> -->
-                                    <mat-progress-bar mode="determinate" value="{{ (row.capacitaciones.length / row.cargo.puesto.capacitaciones.length)*100 }}"></mat-progress-bar>
-                            {{ row.capacitaciones.length }} / {{ row.cargo.puesto.capacitaciones.length }}
+                            <div *ngIf="row.cargo.length != 0">
+                              
+                                    <mat-progress-bar mode="determinate" value="{{ (row.capacitaciones.length / row.total_capacitaciones)*100 }}"></mat-progress-bar>
+                            {{ row.capacitaciones.length }} / {{ row.total_capacitaciones }}
+                            <br>
+                            @for (item of row.cargo; track item; let i = $index) {
+                                <span  [style.background-color]="colores[i]">{{ item.puesto.descripcion }} </span> 
+                            }
+                            
+                            <!-- <div *ngFor="let items of row.cargo">
+                                 {{ items.puesto.descripcion }} ({{items.puesto.capacitaciones.length}}) 
+                    
+                            </div> -->
                             </div>
-                            <div *ngIf="!row.cargo">
+                            <div *ngIf="row.cargo.length == 0">
                                 -- PUESTO NO ASIGNADO --
                             </div>
                         </td>
@@ -74,10 +81,10 @@
                     <ng-container matColumnDef="porcentaje">
                         <th mat-header-cell *matHeaderCellDef class="hide-xs  hide-sm">PORCENTAJE</th>
                         <td mat-cell *matCellDef="let row" class="hide-xs hide-sm">
-                            <div *ngIf="row.cargo">
-                                {{ (row.capacitaciones.length / row.cargo.puesto.capacitaciones.length)*100 | number:'1.2-2' }} %
-                            </div>
-                            <div *ngIf="!row.cargo">
+                            <div *ngIf="row.cargo.length != 0">
+                                {{ (row.capacitaciones.length / row.total_capacitaciones)*100 | number:'1.2-2' }} %
+                            </div> 
+                            <div *ngIf="row.cargo.length == 0">
                                 -- PUESTO NO ASIGNADO --
                             </div>
                         </td>
@@ -129,8 +136,8 @@
     </mat-card>
 
     <ng-template #rowMenu let-row="row" let-status="status">
-        <div class="context-menu mat-elevation-z2" cdkMenu  *ngIf="row.cargo">
-            <button class="context-menu-item" cdkMenuItem (click)="openDialogCapacitaciones(row)"><mat-icon>receipt</mat-icon>&nbsp;VER CAPACITACIONES</button>
+        <div class="context-menu mat-elevation-z2" cdkMenu >
+            <button class="context-menu-item" cdkMenuItem (click)="openDialogCapacitaciones(row)" *ngIf="row.cargo.length > 0"><mat-icon>receipt</mat-icon>&nbsp;VER CAPACITACIONES</button>
             <button class="context-menu-item" cdkMenuItem (click)="deleteRow(row)"><mat-icon style="color: red;">delete</mat-icon>&nbsp;DAR DE BAJA</button>
             
         </div>

@@ -12,6 +12,7 @@ use App\Models\Capacitacion\Puesto;
 use App\Models\Capacitacion\RelPuestoCapacitacion;
 use App\Models\Inventario\CatalogoPersonal;
 use App\Models\Capacitacion\RelTrabajadorCapacitacion;
+use App\Models\Capacitacion\RelTrabajadorPuesto;
 use Carbon\Carbon;
 
 class PuestoController extends Controller
@@ -105,6 +106,22 @@ class PuestoController extends Controller
         try{
             $rol = Puesto::find($id);
             $rol->delete();
+
+            return response()->json(['data'=>'Registro eliminado'], HttpResponse::HTTP_OK);
+        }catch(\Exception $e){
+            throw new \App\Exceptions\LogError('Ocurrio un error al intentar eliminar el rol',0,$e);
+        }
+    }
+
+    public function deleteRelUserPuesto(Request $request)
+    {
+        try{
+            $parametros = $request->all();
+            
+            $rol = RelTrabajadorPuesto::where("catalogo_personal_id",$parametros['catalogo_personal_id'])
+                                        ->where("catalogo_puesto_id", $parametros['catalogo_puesto_id'])
+                                        ->delete();
+            
 
             return response()->json(['data'=>'Registro eliminado'], HttpResponse::HTTP_OK);
         }catch(\Exception $e){

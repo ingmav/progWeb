@@ -2,9 +2,11 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ListadoContratoComponent } from './contrato/listado-contrato/listado-contrato.component';
 import { AuthGuard } from 'src/app/auth/auth.guard';
+import { ListaAsistenciaComponent } from './asistencia/lista-asistencia/lista-asistencia.component';
 
 const routes: Routes = [
   { path: 'recursos-humanos/listado-contrato',             component: ListadoContratoComponent,          canActivate: [AuthGuard] },
+  { path: 'recursos-humanos/asistencia',             component: ListaAsistenciaComponent,          canActivate: [AuthGuard] },
 ];
 
 @NgModule({

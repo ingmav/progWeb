@@ -2,7 +2,7 @@
   <div class="flex-fill box-login" style=" width: 100%; height: 100%; display: flex; justify-content: center; align-items: center;" [formGroup]="loginForm">
     <mat-card class="boder-card" style="margin:10px;">
       <div class="welcome"> 
-        <span *ngIf="!isLoading">Bienvenido</span>
+        <span *ngIf="!isLoading">BIENVENIDO</span>
         <span *ngIf="isLoading">Conectando...</span>
       </div>
       <!-- <div><img style="width:100%"src="assets/profile-icon.svg" alt=""></div> -->
@@ -35,10 +35,9 @@
         </div>
       </div>
       <mat-divider></mat-divider>
-      <!--div class="flex-column flex-gap" fxAlignItems="center" style="margin:0pc; padding:10px;">
+      <div class="flex-column flex-gap" fxAlignItems="center" style="margin:0pc; padding:10px;">
           <button fxFlex (click)="onSubmit()" mat-raised-button color="primary" [disabled]="loginForm.invalid || isLoading"><mat-icon>login</mat-icon>  Acceder</button>
-          <button mat-flat-button (click)="showResetPassword()"><mat-icon>password</mat-icon> Restablecer mi contraseña</button>
-      </div-->
+      </div>
     </mat-card>
   </div>
 </section>
