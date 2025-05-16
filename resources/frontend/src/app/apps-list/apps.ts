@@ -94,7 +94,9 @@ export const APPS:App [] = [
             identificador:'nomina',
             children:[
                 {   name:"Asistencia",      route: "recursos-humanos/asistencia",           icon: "", unicon: "uil uil-user-square" },
-        ]}
+                {   name:"Lista Nominal",      route: "recursos-humanos/nomina",           icon: "", unicon: "uil uil-user-square" },
+        ]},
+        
     ]
     },
 

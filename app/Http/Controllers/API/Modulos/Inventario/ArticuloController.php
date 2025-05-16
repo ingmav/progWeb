@@ -174,8 +174,10 @@ class ArticuloController extends Controller
                                     "catalogo_personal.descripcion",
                                     "catalogo_personal.cargo",
                                     DB::RAW("catalogo_puesto.descripcion as puesto"),
+                                    //DB::RAW("(select descripcion from catalogo_puesto where catalogo_puesto.id=rel_trabajador_puesto.catalogo_puesto_id limit 1) as puesto"),
                                     "movtos_detalles.cantidad")
-                                    ->orderBy("fecha_movimiento", "desc");
+                                    ->orderBy("fecha_movimiento", "desc")
+                                    ->groupBy("movtos.id");
 
             if(isset($parametros['page'])){
                 $resultadosPorPagina = isset($parametros["per_page"])? $parametros["per_page"] : 10;
