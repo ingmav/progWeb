@@ -13,7 +13,7 @@ class CreateTablesNomina extends Migration
      */
     public function up()
     {
-        /*Schema::create('catalogo_conceptos', function (Blueprint $table) {
+        Schema::create('catalogo_conceptos', function (Blueprint $table) {
             $table->id();
             $table->string("descripcion",150);
             $table->string("abreviatura",150);
@@ -21,7 +21,7 @@ class CreateTablesNomina extends Migration
             $table->string("clave",);
             $table->timestamps();
             $table->softDeletes();
-        });*/
+        });
         
         Schema::create('catalogo_nomina', function (Blueprint $table) {
             $table->id();
@@ -74,6 +74,6 @@ class CreateTablesNomina extends Migration
         Schema::dropIfExists('catalogo_nomina_pago_detalle');
         Schema::dropIfExists('catalogo_nomina_pago');
         Schema::dropIfExists('catalogo_nomina');
-        //Schema::dropIfExists('catalogo_conceptos');
+        Schema::dropIfExists('catalogo_conceptos');
     }
 }
