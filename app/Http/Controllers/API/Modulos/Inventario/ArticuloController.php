@@ -148,7 +148,7 @@ class ArticuloController extends Controller
     {
         try{
             $articulo = CatalogoArticulos::getModel()->get();
-            $personal = CatalogoPersonal::getModel()->get();
+            $personal = CatalogoPersonal::getModel()->withTrashed()->get();
             
             return response()->json(['articulo'=>$articulo,'personal'=>$personal], HttpResponse::HTTP_OK);
         }catch(\Exception $e){

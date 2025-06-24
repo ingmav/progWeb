@@ -1,0 +1,162 @@
+<section class="flex-column" style="height: 100%; overflow: hidden; flex: 1 1 0%;"
+    (document:keydown.escape)="cancelarAccion()"> <!-- Main Body <<<<<<< -->
+    <section class="dialog-toolbar"> <!-- Toolbar Menu <<<<<<< -->
+        <div class="flex-row">
+            <div class="label-info">
+                Conceptos de Trabajador
+            </div>
+            <div class="flex-fill"></div>
+            <div class="label-info screen-size-icon" *ngIf="currentScreenSize == 'xs' || currentScreenSize == 'sm'">
+                <mat-icon>phone_iphone</mat-icon>
+            </div>
+            <button mat-button class="boton-accion" (click)="resizeDialog()"
+                [matTooltip]="(dialogMaxSize)?'Restaurar':'Maximizar'" [matTooltipPosition]="'left'" tabindex="-1"
+                *ngIf="currentScreenSize != 'xs' && currentScreenSize != 'sm'">
+                <mat-icon>{{(dialogMaxSize)?'fit_screen':'fullscreen'}}</mat-icon>
+            </button>
+            <button class="boton-accion boton-cerrar" mat-button (click)="cerrar()"
+                tabindex="-1"><mat-icon>close</mat-icon></button>
+        </div>
+    </section> <!-- <<<<<<< Toolbar Menu -->
+    <section>
+        <alert-panel></alert-panel>
+    </section>
+    <section class="flex-fill flex-column" style="padding:8px; overflow: auto;">
+        <div class="flex-fill flex-column flex-gap">
+            <mat-card class="flex-column flex-gap xs-max-height-user-form" style="padding: 8px;" [formGroup]="form">
+                <div class="flex-row flex-xs-column flex-fill flex-gap module-search-bar">
+                    <mat-form-field appearance="fill" class="flex-fill" >
+                        <mat-label>PERSONAL: </mat-label>
+                        <input type="text" matInput formControlName="catalogo_personal_id" [readonly]="edicion_personal"
+                            [matAutocomplete]="personalAutocomplete" >
+                        <mat-autocomplete #personalAutocomplete="matAutocomplete"
+                            [displayWith]="getDisplayFn('nombre_completo')" [panelWidth]="'auto'">
+                            <mat-option *ngFor="let item of filteredCatalogs['personal'] | async" [value]="item" >
+                                {{ item.nombre_completo }}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                    <mat-form-field appearance="fill" class="flex-fill">
+                        <mat-label>CONCEPTO</mat-label>
+                        <input type="text" matInput formControlName="catalogo_conceptos_id"
+                            [matAutocomplete]="conceptoAutocomplete">
+                        <mat-autocomplete #conceptoAutocomplete="matAutocomplete"
+                            [displayWith]="getDisplayFn('descripcion')" [panelWidth]="'auto'">
+                            <mat-option *ngFor="let item of filteredCatalogs['concepto'] | async" [value]="item">
+                                {{ item.descripcion }}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                    <div class="flex-row flex-xs-column flex-fill flex-gap">
+                        <mat-form-field appearance="fill" class="flex-fill">
+                            <mat-label>UNIDADES: </mat-label>
+                            <input type="number" matInput autocomplete="off" formControlName="unidades"
+                                placeholder="Unidades" required>
+
+                        </mat-form-field>
+                    </div>
+                    <div class="flex-row flex-xs-column flex-fill flex-gap">
+                        <mat-form-field appearance="fill" class="flex-fill">
+                            <mat-label>CANTIDAD: </mat-label>
+                            <input type="number" matInput autocomplete="off" formControlName="monto"
+                                placeholder="Cantidad" required>
+
+                        </mat-form-field>
+                    </div>
+                    <button mat-raised-button color="primary" [matTooltip]="'AGREGAR'" (click)="agregar_concepto()" [disabled]="!form.valid">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                </div>
+
+            </mat-card>
+            <mat-toolbar style="background-color: black;">
+                <span class="example-spacer"></span>
+                <div class="contenedor">
+                    <div class="title_contenedor">CANTIDAD</div>
+                    <div class="data_contenedor">{{ totales.cantidad | number}}</div>
+                </div>
+                <div class="contenedor">
+                    <div class="title_contenedor">PERCEPCIONCES</div>
+                    <div class="data_contenedor">{{ totales.percepciones | number:'1.2-2'}}</div>
+                </div>
+                <div class="contenedor">
+                    <div class="title_contenedor">DEDUCCIONES</div>
+                    <div class="data_contenedor">{{ totales.deducciones | number:'1.2-2'}}</div>
+                </div>
+                <div class="contenedor">
+                    <div class="title_contenedor">LIQUIDO</div>
+                    <div class="data_contenedor">$ {{ totales.liquido | number:'1.2-2' }}</div>
+                </div>
+                
+            </mat-toolbar>
+            <mat-card class="table-card flex-fill">
+                <div class="flex-column" style="height: 100%;">
+                    <div class="main-list-table left-click-open flex-fill">
+                        <table mat-table [dataSource]="data" matSort matSortActive="updated_at" matSortDirection="desc">
+                            <ng-container matColumnDef="concepto">
+                                <th mat-header-cell *matHeaderCellDef>CONCEPTO</th>
+                                <td mat-cell *matCellDef="let row">
+                                    {{ row.conceptos.clave }} - {{ row.conceptos.descripcion }}
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="unidades">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header class="hide-xs  hide-sm">UNIDADES
+                                </th>
+                                <td mat-cell *matCellDef="let row" class="hide-xs  hide-sm">
+                                    <div *ngIf="row.unidades>0">{{row.unidades}}</div>
+                                    <div *ngIf="row.unidades==0">--</div>
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="monto">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header class="hide-xs  hide-sm">MONTO
+                                </th>
+                                <td mat-cell *matCellDef="let row" class="hide-xs  hide-sm" style="text-align: right;">
+                                    $ {{row.subtotal | number:'1.2-2'}}
+                                    <span *ngIf="row.conceptos.tipo == 1" style="color: green;">[ + ]</span>
+                                    <span *ngIf="row.conceptos.tipo == 2" style="color: red;">[ - ]</span>
+                                </td>
+                            </ng-container>
+
+
+                            <ng-container matColumnDef="loadingResults">
+                                <td mat-footer-cell *matFooterCellDef [attr.colspan]="displayedColumns.length"
+                                    class="no-results-found">
+                                    --| Cargando Registros |--
+                                    <mat-progress-bar mode="query"></mat-progress-bar>
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="noResultsFound">
+                                <td mat-footer-cell *matFooterCellDef [attr.colspan]="displayedColumns.length"
+                                    class="no-results-found">
+                                    No se encontraron registros
+                                </td>
+                            </ng-container>
+
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns;let i = index"
+                                [cdkContextMenuTriggerFor]="rowMenu" [cdkContextMenuTriggerData]="{row:row, index:i}"></tr>
+                            <tr mat-footer-row *matFooterRowDef="['loadingResults']"
+                                [ngClass]="{'hide':!isLoadingResults}"></tr>
+                            <tr mat-footer-row *matFooterRowDef="['noResultsFound']"
+                                [ngClass]="{'hide':!(data!=null && data.length==0 && !isLoadingResults)}"></tr>
+                        </table>
+                    </div>
+                    <div>
+                        <mat-paginator [length]="resultsLength" [pageSize]="pageSize" [pageSizeOptions]="[25, 50, 100]"
+                            showFirstLastButtons aria-label="Selecciona una página"></mat-paginator>
+                    </div>
+                </div>
+            </mat-card>
+        </div>
+    </section>
+</section>
+
+<ng-template #rowMenu let-row="row"  let-i="index">
+    <div class="context-menu mat-elevation-z2" cdkMenu>
+        <button class="context-menu-item" cdkMenuItem (click)="edicion_concepto(row)"><mat-icon>edit</mat-icon>&nbsp;EDITAR</button>
+        <button class="context-menu-item" cdkMenuItem (click)="elimina_concepto(row, i)"><mat-icon>delete</mat-icon>&nbsp;ELIMINAR</button>
+
+    </div>
+</ng-template>

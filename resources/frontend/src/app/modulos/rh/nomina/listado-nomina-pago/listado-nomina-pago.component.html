@@ -1,0 +1,101 @@
+<div class="flex-row flex-gap module-search-bar">
+    <mat-form-field class="flex-fill" appearance="fill">
+        <mat-label>Buscar</mat-label>
+        <input matInput [(ngModel)]="searchQuery" (keyup.escape)="cleanSearch()" (keyup.enter)="applySearch()"
+            placeholder="Buscar usuario" autocomplete="off">
+        <button matSuffix *ngIf="searchQuery" mat-icon-button (click)="cleanSearch()" [attr.aria-label]="'Clean Query'"
+            [attr.aria-pressed]="'cleanQuery'">
+            <mat-icon>close</mat-icon>
+        </button>
+        <button mat-icon-button matSuffix (click)="applySearch()">
+            <mat-icon>search</mat-icon>
+        </button>
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" [matTooltip]="'Nuevo Movimiento'"><mat-icon>add</mat-icon></button>
+</div>
+
+<div>
+    <alert-panel></alert-panel>
+    <!-- <mat-progress-bar *ngIf="isLoadingPDF" mode="query"></mat-progress-bar> -->
+</div>
+
+<mat-card class="table-card flex-fill">
+    <div class="flex-column" style="height: 100%;">
+        <div class="main-list-table left-click-open flex-fill">
+            <table mat-table [dataSource]="data" matSort matSortActive="updated_at" matSortDirection="desc">
+                <ng-container matColumnDef="empleado">
+                    <th mat-header-cell *matHeaderCellDef>EMPLEADO</th>
+                    <td mat-cell *matCellDef="let row">
+                        {{ row.personal.nombre_completo }}
+                        <div *ngIf="row.personal.deleted_at != null" style="color: red; font-size: 9pt;">DE BAJA</div>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="perceociones">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="hide-xs  hide-sm">PERCEPCIONES</th>
+                    <td mat-cell *matCellDef="let row" class="hide-xs  hide-sm">
+                        $ {{row.total_percepciones | number:'1.2-2'}}
+
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="deducciones">
+                    <th mat-header-cell *matHeaderCellDef class="hide-xs  hide-sm">DEDUCCIONES</th>
+                    <td mat-cell *matCellDef="let row" class="hide-xs hide-sm">
+                        $ {{ row.total_deducciones | number:'1.2-2'}}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="liquido">
+                    <th mat-header-cell *matHeaderCellDef class="hide-xs">LIQUIDO</th>
+                    <td mat-cell *matCellDef="let row" class="hide-xs">
+                        $ {{ row.total_neto | number:'1.2-2'}}
+                    </td>
+                </ng-container>
+
+
+                <ng-container matColumnDef="loadingResults">
+                    <td mat-footer-cell *matFooterCellDef [attr.colspan]="displayedColumns.length"
+                        class="no-results-found">
+                        --| Cargando Registros |--
+                        <mat-progress-bar mode="query"></mat-progress-bar>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="noResultsFound">
+                    <td mat-footer-cell *matFooterCellDef [attr.colspan]="displayedColumns.length"
+                        class="no-results-found">
+                        No se encontraron registros
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="expand">
+                    <th mat-header-cell *matHeaderCellDef aria-label="row actions">&nbsp;</th>
+                    <td mat-cell *matCellDef="let element">
+                        hola
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;" [cdkContextMenuTriggerFor]="rowMenu"
+                    [cdkContextMenuTriggerData]="{row:row}"></tr>
+                <tr mat-footer-row *matFooterRowDef="['loadingResults']" [ngClass]="{'hide':!isLoadingResults}"></tr>
+                <tr mat-footer-row *matFooterRowDef="['noResultsFound']"
+                    [ngClass]="{'hide':!(data!=null && data.length==0 && !isLoadingResults)}"></tr>
+            </table>
+        </div>
+        <div>
+            <mat-paginator [length]="resultsLength" [pageSize]="pageSize" [pageSizeOptions]="[25, 50, 100]"
+                showFirstLastButtons aria-label="Selecciona una página"></mat-paginator>
+        </div>
+    </div>
+</mat-card>
+
+<ng-template #rowMenu let-row="row" let-status="status">
+    <div class="context-menu mat-elevation-z2" cdkMenu>
+        <button class="context-menu-item" cdkMenuItem (click)="conceptos(row)"><mat-icon>more_vert</mat-icon>&nbsp;Conceptos</button>
+        <button class="context-menu-item" cdkMenuItem><mat-icon> delete</mat-icon>&nbsp;Eliminar</button>
+
+    </div>
+</ng-template>

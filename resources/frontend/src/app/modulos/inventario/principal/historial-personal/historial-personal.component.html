@@ -18,7 +18,7 @@
     <section>
         <alert-panel></alert-panel>
     </section>
-    <div class="flex-row flex-gap module-search-bar"  [formGroup]="form">
+    <div class="flex-row flex-gap"  [formGroup]="form">
         <mat-form-field appearance="fill" class="flex-fill">
             <mat-label>TRABAJADOR</mat-label>
             <input type="text" matInput formControlName="trabajador_ingresar" [matAutocomplete]="trabajadorAutocomplete">
@@ -28,10 +28,14 @@
                     <div style="font-size: 9pt;">
                         <label *ngIf="item.modelo!=''">CARGO: {{ item.cargo }} -</label>
                     </div>
+                    <div style="font-size: 9pt; color: red;">
+                        <label *ngIf="item.deleted_at!=null">DADO DE BAJA</label>
+                    </div>
                 </mat-option>
             </mat-autocomplete>
-            <mat-hint *ngIf="form.get('trabajador_ingresar').value">
-                CARGO: {{form.get('trabajador_ingresar').value.cargo}}
+         
+            <mat-hint *ngIf="form.get('trabajador_ingresar').value.deleted_at != null" style="color: red;height: 20px !important;">
+                DADO DE BAJA
             </mat-hint>
         </mat-form-field>
 
@@ -43,7 +47,7 @@
             <mat-icon>search</mat-icon> BUSCAR HISTORIAL
         </button>
     </div>
-    <mat-card class="flex-row flex-gap xs-max-height-user-form module-search-bar" style="padding: 8px;">
+    <mat-card class="flex-row flex-gap xs-max-height-user-form" style="padding: 8px;">
 
         <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 demo-table" style="margin-top: 20px;">
             <!-- Position Column -->

@@ -1,1 +1,90 @@
-<p>listado-nomina works!</p>
+<div class="flex-row flex-gap module-search-bar">
+    <mat-form-field class="flex-fill" appearance="fill">
+        <mat-label>Buscar</mat-label>
+        <input matInput [(ngModel)]="searchQuery" (keyup.escape)="cleanSearch()" (keyup.enter)="applySearch()" placeholder="Buscar usuario" autocomplete="off">
+        <button matSuffix *ngIf="searchQuery" mat-icon-button (click)="cleanSearch()" [attr.aria-label]="'Clean Query'" [attr.aria-pressed]="'cleanQuery'">
+            <mat-icon>close</mat-icon>
+        </button>
+        <button mat-icon-button matSuffix (click)="applySearch()">
+            <mat-icon>search</mat-icon>
+        </button>
+    </mat-form-field>
+    <button mat-button  [disabled]="true"  *ngIf="isLoadingCardex">
+        GENERANDO CARDEX
+        <mat-progress-bar  mode="query"></mat-progress-bar>
+    </button>
+    <button mat-raised-button color="primary" (click)="openDialogMovto()" [matTooltip]="'Nuevo Movimiento'"><mat-icon>add</mat-icon></button>
+</div>
+
+<div>
+    <alert-panel></alert-panel>
+    <!-- <mat-progress-bar *ngIf="isLoadingPDF" mode="query"></mat-progress-bar> -->
+</div>
+
+<mat-card class="table-card flex-fill">
+    <div class="flex-column" style="height: 100%;">
+        <div class="main-list-table left-click-open flex-fill">
+            <table mat-table [dataSource]="data" matSort matSortActive="updated_at" matSortDirection="desc">
+                <ng-container matColumnDef="nomina">
+                    <th mat-header-cell *matHeaderCellDef>NOMINA</th>
+                    <td mat-cell *matCellDef="let row">
+                        {{ row.id }}
+                        
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="periodo">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="hide-xs  hide-sm">FECHA</th>
+                    <td mat-cell *matCellDef="let row" class="hide-xs  hide-sm">
+                        {{row.fecha}}
+                        
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="trabajadores">
+                    <th mat-header-cell *matHeaderCellDef class="hide-xs  hide-sm">TRABAJADORES</th>
+                    <td mat-cell *matCellDef="let row" class="hide-xs hide-sm">
+                             {{ row.pagos.length }}        
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="monto_total">
+                    <th mat-header-cell *matHeaderCellDef class="hide-xs">MONTO TOTAL</th>
+                    <td mat-cell *matCellDef="let row" class="hide-xs">
+                        $ {{ row.monto_nominal | number:'1.2-2'}}        
+                    </td>
+                </ng-container>
+                
+            
+                <ng-container matColumnDef="loadingResults">
+                    <td mat-footer-cell *matFooterCellDef [attr.colspan]="displayedColumns.length" class="no-results-found">
+                        --| Cargando Registros |--
+                        <mat-progress-bar mode="query"></mat-progress-bar>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="noResultsFound">
+                    <td mat-footer-cell *matFooterCellDef [attr.colspan]="displayedColumns.length" class="no-results-found" >
+                        No se encontraron registros 
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;" [cdkContextMenuTriggerFor]="rowMenu" [cdkContextMenuTriggerData]="{row:row}"></tr>
+                <tr mat-footer-row *matFooterRowDef="['loadingResults']" [ngClass]="{'hide':!isLoadingResults}"></tr>
+                <tr mat-footer-row *matFooterRowDef="['noResultsFound']" [ngClass]="{'hide':!(data!=null && data.length==0 && !isLoadingResults)}"></tr>
+            </table>
+        </div>
+        <div>
+            <mat-paginator [length]="resultsLength" [pageSize]="pageSize" [pageSizeOptions]="[25, 50, 100]" showFirstLastButtons aria-label="Selecciona una página"></mat-paginator>
+        </div>
+    </div>
+</mat-card>
+
+<ng-template #rowMenu let-row="row" let-status="status">
+    <div class="context-menu mat-elevation-z2" cdkMenu>
+        <button class="context-menu-item" cdkMenuItem routerLink="{{row.id}}"><mat-icon>remove_red_eye</mat-icon>&nbsp;Ver Detalles</button>
+        <button class="context-menu-item" cdkMenuItem (click)="imprimirCardex(row)"><mat-icon>delete</mat-icon>&nbsp;Eliminar</button>
+        
+    </div>
+</ng-template>

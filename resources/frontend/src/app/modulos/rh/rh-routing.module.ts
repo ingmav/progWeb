@@ -4,11 +4,13 @@ import { ListadoContratoComponent } from './contrato/listado-contrato/listado-co
 import { AuthGuard } from 'src/app/auth/auth.guard';
 import { ListaAsistenciaComponent } from './asistencia/lista-asistencia/lista-asistencia.component';
 import { ListadoNominaComponent } from './nomina/listado-nomina/listado-nomina.component';
+import { ListadoNominaPagoComponent } from './nomina/listado-nomina-pago/listado-nomina-pago.component';
 
 const routes: Routes = [
   { path: 'recursos-humanos/listado-contrato',             component: ListadoContratoComponent,          canActivate: [AuthGuard] },
   { path: 'recursos-humanos/asistencia',             component: ListaAsistenciaComponent,          canActivate: [AuthGuard] },
   { path: 'recursos-humanos/nomina',             component: ListadoNominaComponent,          canActivate: [AuthGuard] },
+  { path: 'recursos-humanos/nomina/:id',             component: ListadoNominaPagoComponent,          canActivate: [AuthGuard] },
 ];
 
 @NgModule({

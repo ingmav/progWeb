@@ -1,0 +1,23 @@
+.example-spacer {
+  flex: 1 1 auto;
+}
+
+.contenedor {
+  text-align: center;
+  border-right: 1px solid #cfcfcf;
+  color: #cfcfcf;
+  padding-right: 10px;
+  padding-left: 10px;
+  line-height: 10pt;
+}
+
+.title_contenedor {
+  font-size: 10pt;
+  padding: 5px;
+  font-weight: bold;
+}
+
+.data_contenedor
+{
+  font-size: 10pt;
+}

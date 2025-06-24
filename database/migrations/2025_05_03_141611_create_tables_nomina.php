@@ -13,7 +13,7 @@ class CreateTablesNomina extends Migration
      */
     public function up()
     {
-        Schema::create('catalogo_conceptos', function (Blueprint $table) {
+        /*Schema::create('catalogo_conceptos', function (Blueprint $table) {
             $table->id();
             $table->string("descripcion",150);
             $table->string("abreviatura",150);
@@ -61,6 +61,21 @@ class CreateTablesNomina extends Migration
             $table->foreign('catalogo_conceptos_id')->references('id')->on('catalogo_conceptos');
             $table->timestamps();
             $table->softDeletes();
+        });*/
+
+        Schema::create('catalogo_nomina_periodicos', function (Blueprint $table) {
+            $table->id();
+            $table->bigInteger("catalogo_conceptos_id")->unsigned();
+            $table->bigInteger("catalogo_personal_id")->unsigned();
+            $table->decimal("monto", 15,2)->default(0);
+            $table->date("fecha_inicial")->nullable();
+            $table->date("fecha_final")->nullable();
+            
+
+            $table->foreign('catalogo_conceptos_id')->references('id')->on('catalogo_conceptos');
+            $table->foreign('catalogo_personal_id')->references('id')->on('catalogo_personal');
+            $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -71,9 +86,10 @@ class CreateTablesNomina extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('catalogo_nomina_pago_detalle');
+        Schema::dropIfExists('catalogo_nomina_periodicos');
+        /*Schema::dropIfExists('catalogo_nomina_pago_detalle');
         Schema::dropIfExists('catalogo_nomina_pago');
         Schema::dropIfExists('catalogo_nomina');
-        Schema::dropIfExists('catalogo_conceptos');
+        Schema::dropIfExists('catalogo_conceptos');*/
     }
 }

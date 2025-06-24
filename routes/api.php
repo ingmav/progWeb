@@ -73,6 +73,10 @@ Route::group(['middleware'=>'auth'],function($router){
     
     Route::post('importar-asistencia',        'API\Modulos\Nomina\AsistenciaController@importar');
 
+    Route::apiResource('nomina',        'API\Modulos\Nomina\NominaController');
+    Route::apiResource('nomina-pago',        'API\Modulos\Nomina\NominaPagoController');
+    Route::get('catalogos-nomina',        'API\Modulos\CatalogosController@Index');
+
     
 });
 

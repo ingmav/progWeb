@@ -27,6 +27,11 @@ class PersonalController extends Controller
                                 ->orWhere('cargo','LIKE','%'.$parametros['query'].'%');
                 });
             }
+            
+            //return response()->json(['data'=>$parametros['todos']],HttpResponse::HTTP_OK);
+            if($parametros['todos'] == "true"){
+                $obj = $obj->withTrashed();
+            }
 
             if((isset($parametros['sort']) && $parametros['sort']) && (isset($parametros['direction']) && $parametros['direction'])){
                 $obj = $obj->orderBy($parametros['sort'],$parametros['direction']);
@@ -64,6 +69,8 @@ class PersonalController extends Controller
                                                 "movtos_detalles.cantidad",
                                                 "catalogo_unidad.abreviatura")
                                         ->where("catalogo_personal.id", $parametros['trabajador_id']);
+
+            $obj = $obj->withTrashed();                         
 
             if(isset($parametros['page'])){
                 $resultadosPorPagina = isset($parametros["per_page"])? $parametros["per_page"] : 7;

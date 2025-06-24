@@ -152,6 +152,7 @@ export class HistorialPersonalComponent {
       next:(response:any) => {
         this.filterCatalogs.personal = response.personal;
         this.filteredCatalogs['personal'] = this.form.controls['trabajador_ingresar'].valueChanges.pipe(startWith(''),map(value => this._filter(value,'personal','descripcion')));
+        
       },
       error:(response:any) => {
         this.alertPanel.showError(response.error.message);

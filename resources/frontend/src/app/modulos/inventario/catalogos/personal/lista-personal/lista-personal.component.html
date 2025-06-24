@@ -14,6 +14,7 @@
     </button-->
     <button mat-raised-button color="primary" (click)="openDialog()" [matTooltip]="'Nuevo Trabajador'"><mat-icon>add</mat-icon></button>
 </div>
+<mat-slide-toggle [(ngModel)]="isChecked" style="padding: 5px;">Todo el Personal</mat-slide-toggle>
 
 <!--div>
     <alert-panel></alert-panel>
@@ -28,7 +29,7 @@
                     <th mat-header-cell *matHeaderCellDef>NOMBRE</th>
                     <td mat-cell *matCellDef="let row">
                         {{ row.descripcion }}
-                        
+                        <div *ngIf="row.deleted_at != null" style="color: red;">DADO DE BAJA</div>
                     </td>
                 </ng-container>
                 <ng-container matColumnDef="cargo">
@@ -90,7 +91,7 @@
 <ng-template #rowMenu let-row="row" let-status="status">
     <div class="context-menu mat-elevation-z2" cdkMenu>
         <button class="context-menu-item" cdkMenuItem (click)="openDialog(row)"><mat-icon>edit</mat-icon>&nbsp;EDITAR</button>
-        <button class="context-menu-item" cdkMenuItem (click)="eliminar(row)"><mat-icon>delete</mat-icon>&nbsp;ELIMINAR</button>
+        <button class="context-menu-item" cdkMenuItem (click)="eliminar(row)" *ngIf="row.deleted_at == null"><mat-icon>delete</mat-icon>&nbsp;ELIMINAR</button>
         
     </div>
 </ng-template>

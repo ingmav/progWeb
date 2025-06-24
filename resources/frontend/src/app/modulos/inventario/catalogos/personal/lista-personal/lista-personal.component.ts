@@ -31,6 +31,7 @@ export class ListaPersonalComponent {
   isLoadingResults:boolean;
   
   searchQuery:string;
+  isChecked:boolean;
 
   pageSize:number = 50;
   displayedColumns: string[] = ['nombre', 'cargo','registro'];
@@ -68,12 +69,14 @@ export class ListaPersonalComponent {
 
   applySearch(){
     this.isLoadingResults = true;
+    console.log(this.isChecked);
     let params:any = {
       sort: this.sort.active,
       direction: this.sort.direction,
       page: this.paginator.pageIndex+1,
       per_page: this.paginator.pageSize,
       query: this.searchQuery,
+      todos: (this.isChecked == true)? true:false,
     };
     this.isLoadingResults = false;
         
